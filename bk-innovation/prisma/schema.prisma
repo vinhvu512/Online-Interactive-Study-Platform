@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
@@ -29,8 +29,8 @@ model Course {
   attachments Attachments[]
   purchases   Purchase[]
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([categoryId])
 }
@@ -105,11 +105,11 @@ model UserProgress {
 }
 
 model Purchase {
-  id        String   @id @default(uuid())
-  userId    String
+  id     String @id @default(uuid())
+  userId String
 
-  courseId  String
-  course    Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -118,9 +118,9 @@ model Purchase {
 }
 
 model StripeCustomer {
-  id                 String   @id @default(uuid())
-  userId             String   @unique
-  stripeCustomerId   String   @unique
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  stripeCustomerId String   @unique
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
