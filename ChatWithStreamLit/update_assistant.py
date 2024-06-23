@@ -2,7 +2,7 @@ from openai import OpenAI
 import os
 
 
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="sk-proj-YwBoraiCYxQkLrxAY4SeT3BlbkFJyANuw6SIWHZ4F9AxmgCi")
 
 assistant_id = "asst_V91MJ0qJsnrLXpn4x9657GB5"
 

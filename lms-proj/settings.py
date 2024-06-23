@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -57,7 +58,7 @@ MIDDLEWARE = [
 
 
 
-ROOT_URLCONF = 'LMS.urls'
+ROOT_URLCONF = 'lms-proj.urls'
 
 TEMPLATES = [
     {
@@ -76,7 +77,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'LMS-file.wsgi.application'
+WSGI_APPLICATION = 'lms-proj.wsgi.application'
 
 
 # Database
@@ -133,7 +134,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-OPENAI_API_KEY = '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'
+OPENAI_API_KEY = 'sk-proj-YwBoraiCYxQkLrxAY4SeT3BlbkFJyANuw6SIWHZ4F9AxmgCi'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Replace with your Next.js frontend URL
     # Add other domains if necessary

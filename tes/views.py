@@ -60,10 +60,12 @@ class GenerateVideoView(View):
     def post(self, request):
         try:
             data = json.loads(request.body)
+            print(data)
+            # print(request)
             pdf_url = data.get('pdfUrl')
-
-            if not pdf_url:
-                return JsonResponse({'error': 'PDF URL is required'}, status=400)
+            print(pdf_url)
+            # if not pdf_url:
+            #     return JsonResponse({'error': 'PDF URL is required'}, status=400)
 
             processor = GPTProcessor(api_key=settings.OPENAI_API_KEY)
 
