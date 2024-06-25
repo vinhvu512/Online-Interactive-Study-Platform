@@ -49,7 +49,7 @@ const ChapterIdPage = async ({ params }: ChapterIdPageProps) => {
       {/*)}*/}
       <div className="flex flex-col max-w-4xl mx-auto pb-20">
         <div className="p-2.5 mt-20">
-          {chapter.slideUrl ? (
+          {!chapter.videoUrl.includes("utfs.io") ? (
             <div className="relative aspect-video rounded-lg shadow-lg overflow-hidden bg-gray-900">
               <video
                 controls
