@@ -50,11 +50,14 @@ const ChapterIdPage = async ({ params }: ChapterIdPageProps) => {
       <div className="flex flex-col max-w-4xl mx-auto pb-20">
         <div className="p-2.5 mt-20">
           {chapter.slideUrl ? (
-            <video
-              controls
-              src={chapter.videoUrl}
-              className="w-full rounded-md mt-2"
-            ></video>
+            <div className="relative aspect-video rounded-lg shadow-lg overflow-hidden bg-gray-900">
+              <video
+                controls
+                src={chapter.videoUrl}
+                className="w-full h-full object-cover"
+                style={{ borderRadius: "0.5rem" }}
+              ></video>
+            </div>
           ) : (
             <VideoPlayer
               chapterId={params.chapterId}
