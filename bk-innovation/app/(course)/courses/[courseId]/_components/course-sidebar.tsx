@@ -2,6 +2,7 @@ import { Chapter, Course, UserProgress } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import { CourseSidebarItem } from "@/app/(course)/courses/[courseId]/_components/course-sidebar-item";
+import { CourseProgress } from "@/components/course-progress";
 
 interface CourseSidebarProps {
   course: Course & {
@@ -25,9 +26,12 @@ export const CourseSidebar = ({
     <div className="h-full border-r flex flex-col overflow-y-auto shadow-sm bg-white">
       <div className="p-6 flex flex-col border-b bg-gray-100">
         <h1 className="font-semibold text-xl mb-2">{course.title}</h1>
-        <p className="text-sm text-gray-600">
-          Progress: <span className="font-medium">{progressCount}%</span>
-        </p>
+        <div>
+          <CourseProgress
+            variant={progressCount === 100 ? "success" : "default"}
+            value={progressCount}
+          />
+        </div>
       </div>
       <div className="flex flex-col w-full px-2 py-4 space-y-2">
         {course.chapters.map((chapter) => {

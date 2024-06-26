@@ -8,6 +8,11 @@ import { getChapter } from "@/actions/get-chapter";
 import { Banner } from "@/components/banner";
 // @ts-ignore
 import { VideoPlayer } from "@/app/(course)/courses/[courseId]/chapters/[chapterId]/_components/video-player";
+import { CourseEnrollButton } from "@/app/(course)/courses/[courseId]/chapters/[chapterId]/_components/course-enroll-button";
+import { Separator } from "@/components/ui/separator";
+import { Preview } from "@/components/preview";
+import { File } from "lucide-react";
+import { CourseProgressButton } from "@/app/(course)/courses/[courseId]/chapters/[chapterId]/_components/course-progress-button";
 
 interface ChapterIdPageProps {
   params: {
@@ -49,7 +54,7 @@ const ChapterIdPage = async ({ params }: ChapterIdPageProps) => {
       {/*)}*/}
       <div className="flex flex-col max-w-4xl mx-auto pb-20">
         <div className="p-2.5 mt-20">
-          {!chapter.videoUrl.includes("utfs.io") ? (
+          {chapter.videoUrl && !chapter.videoUrl.includes("utfs.io") ? (
             <div className="relative aspect-video rounded-lg shadow-lg overflow-hidden bg-gray-900">
               <video
                 controls
@@ -59,16 +64,58 @@ const ChapterIdPage = async ({ params }: ChapterIdPageProps) => {
               ></video>
             </div>
           ) : (
-            <VideoPlayer
-              chapterId={params.chapterId}
-              title={chapter.title}
-              courseId={params.courseId}
-              nextChapterId={nextChapter?.id}
-              playbackId={muxData?.playbackId!}
-              isLocked={false}
-              completeOnEnd={completeOnEnd}
-            />
+            <div className="p-4">
+              <VideoPlayer
+                chapterId={params.chapterId}
+                title={chapter.title}
+                courseId={params.courseId}
+                nextChapterId={nextChapter?.id}
+                playbackId={muxData?.playbackId!}
+                isLocked={false}
+                completeOnEnd={completeOnEnd}
+              />
+            </div>
           )}
+          <div>
+            <div className="p-4 flex flex-col md:flex-row items-center justify-between">
+              <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
+              {chapter.isFree ? (
+                <CourseProgressButton
+                  chapterId={params.chapterId}
+                  courseId={params.courseId}
+                  nextChapterId={nextChapter?.id}
+                  isCompleted={!!userProgress?.isCompleted}
+                />
+              ) : (
+                <CourseEnrollButton
+                // courseId={params.courseId}
+                // price={course.price!}
+                />
+              )}
+            </div>
+            <Separator />
+            <div>
+              <Preview value={chapter.description!} />
+            </div>
+            {!!attachments.length && (
+              <>
+                <Separator />
+                <div className="p-4">
+                  {attachments.map((attachment) => (
+                    <a
+                      href={attachment.url}
+                      target="_blank"
+                      key={attachment.id}
+                      className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline"
+                    >
+                      <File />
+                      <p className="line-clamp-1">{attachment.name}</p>
+                    </a>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
