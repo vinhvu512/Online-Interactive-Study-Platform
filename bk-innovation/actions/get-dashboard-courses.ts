@@ -19,7 +19,6 @@ export const getDashboardCourses = async (
   try {
     const publishedCourses = await db.course.findMany({
       where: {
-        userId,
         isPublished: true,
       },
       include: {
