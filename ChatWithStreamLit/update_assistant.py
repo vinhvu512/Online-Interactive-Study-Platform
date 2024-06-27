@@ -9,7 +9,7 @@ assistant_id = "asst_V91MJ0qJsnrLXpn4x9657GB5"
 # vector_store = client.beta.vector_stores.create(name="DocumentSearch")
 # print(f"Vector Store Id - {vector_store.id}")
 vector_store_id = "vs_myBsbclDk12fPCUkPwVcEczs"
-file_path = ['/Users/twang/PycharmProjects/LMS-file/ChatWithStreamLit/file_test/demo1.pdf','/Users/twang/PycharmProjects/LMS-file/ChatWithStreamLit/file_test/demo2.pdf']
+file_path = ['/Users/vinhvu/LMS/ChatWithStreamLit/file_test/demo1.pdf','/Users/vinhvu/LMS/ChatWithStreamLit/file_test/demo2.pdf']
 file_streams = [open(path,"rb") for path in file_path]
 
 file_batch = client.beta.vector_stores.file_batches.upload_and_poll(

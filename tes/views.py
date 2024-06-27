@@ -27,7 +27,7 @@ class UploadPDFView(View):
             pdf = form.save()
             output_folder = os.path.join(settings.MEDIA_ROOT, 'videos', pdf.title)
             os.makedirs(output_folder, exist_ok=True)
-            video_path, descriptions, rubric, summaries, questions, durations = self.processor.process_pdf_to_video(
+            video_path, descriptions, rubric, summaries, questions, durations = self.processor.vip_process_pdf_to_video(
                 pdf.pdf_file.path, output_folder)
 
             video = Video.objects.create(

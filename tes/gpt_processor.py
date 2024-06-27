@@ -132,7 +132,7 @@ class GPTProcessor:
                 model="gpt-4",
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": f"Create a rubric for this description: {description}"}
+                    {"role": "user", "content": f"This is the description {descriptions}, give me the outline, just the main outline for this"}
                 ]
             )
             rubric.append(response.choices[0].message.content)
@@ -165,20 +165,20 @@ class GPTProcessor:
             questions.append(response.choices[0].message.content)
         return questions
 
-    # def process_pdf_to_video(self, pdf_path, output_folder):
-    #     image_folder = os.path.join(output_folder, 'images')
-    #     audio_folder = os.path.join(output_folder, 'audio')
-    #
-    #     image_files = self.pdf_to_images(pdf_path, image_folder)
-    #     descriptions = self.describe_single_image(image_files)
-    #     audio_files = self.text_to_speech_with_openai(descriptions, audio_folder)
-    #     video_path = os.path.join(output_folder, f"{Path(pdf_path).stem}.mp4")
-    #
-    #     durations = self.create_video(image_files, audio_files, video_path)
-    #     rubric = self.generate_rubric(descriptions)
-    #     summaries = self.generate_summary(descriptions)
-    #     questions = self.generate_questions(descriptions)
-    #     return video_path, descriptions, rubric, summaries, questions, durations
+    def vip_process_pdf_to_video(self, pdf_path, output_folder):
+        image_folder = os.path.join(output_folder, 'images')
+        audio_folder = os.path.join(output_folder, 'audio')
+
+        image_files = self.pdf_to_images(pdf_path, image_folder)
+        descriptions = self.describe_single_image(image_files)
+        audio_files = self.text_to_speech_with_openai(descriptions, audio_folder)
+        video_path = os.path.join(output_folder, f"{Path(pdf_path).stem}.mp4")
+
+        durations = self.create_video(image_files, audio_files, video_path)
+        rubric = self.generate_rubric(descriptions)
+        summaries = self.generate_summary(descriptions)
+        questions = self.generate_questions(descriptions)
+        return video_path, descriptions, rubric, summaries, questions, durations
     def download_pdf(self, pdf_url, output_path):
         response = requests.get(pdf_url)
         response.raise_for_status()  # Raise an error for bad responses
