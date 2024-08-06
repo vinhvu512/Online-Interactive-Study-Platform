@@ -8,6 +8,7 @@ class PDF(models.Model):
         return self.title
 
 class Video(models.Model):
+
     title = models.CharField(max_length=255)
     video_file = models.FileField(upload_to='videos/')
     descriptions = models.JSONField(null=True, blank=True)
@@ -15,6 +16,7 @@ class Video(models.Model):
     summaries = models.JSONField(null=True, blank=True)
     questions = models.JSONField(null=True, blank=True)  # Add questions field
     durations = models.JSONField(null=True, blank=True)  # Add durations field
+    video_url = models.URLField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return self.title

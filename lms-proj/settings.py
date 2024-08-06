@@ -134,7 +134,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-OPENAI_API_KEY = 'sk-proj-18szzA7kkcnFLhDKFWWgT3BlbkFJ4ScHkjW4SlrNPbHW4kqZ'
+OPENAI_API_KEY = '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'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Replace with your Next.js frontend URL
     # Add other domains if necessary

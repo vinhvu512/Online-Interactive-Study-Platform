@@ -13,6 +13,12 @@ from .utils import search_arxiv
 from django.http import JsonResponse
 import requests
 
+from google.cloud import storage
+from google.oauth2 import service_account
+from google.api_core import exceptions as google_exceptions
+import concurrent.futures
+
+
 class UploadPDFView(View):
     template_name = 'upload_pdf.html'
     processor = GPTProcessor(api_key=settings.OPENAI_API_KEY)
@@ -52,11 +58,13 @@ class WatchVideoView(View):
         related_papers = search_arxiv(summary)
         return render(request, self.template_name, {
             'video': video,
-            'related_papers': related_papers
+            'related_papers': related_papers,
+            'video_url': video.video_url  # Add this line
         })
 
 
 class GenerateVideoView(View):
+
     def post(self, request):
         try:
             data = json.loads(request.body)
@@ -76,11 +84,53 @@ class GenerateVideoView(View):
                 pdf_url, output_folder)
 
             # Correct the URL to be served via Django
-            video_url = request.build_absolute_uri(
-                os.path.join(settings.MEDIA_URL, 'generated_videos', os.path.basename(video_path))
+            # video_url = request.build_absolute_uri(
+            #     os.path.join(settings.MEDIA_URL, 'generated_videos', os.path.basename(video_path))
+            # )
+
+            # Thiết lập xác thực Google Cloud
+            credentials = service_account.Credentials.from_service_account_file(
+                '/Users/albuscorleone/PycharmProjects/AI_Challenge/Seraphic_Rarity430816.json',
+                scopes=["https://www.googleapis.com/auth/cloud-platform"]
             )
 
+            # Tên bucket Google Cloud Storage
+            bucket_name = "bki-slide-to-vid"
+
+            # Khởi tạo client Google Cloud Storage
+            storage_client = storage.Client(credentials=credentials)
+            bucket = storage_client.bucket(bucket_name)
+
+            # Hàm tải lên video
+            def upload_file(file_path):
+                file_name = os.path.basename(file_path)
+                video_url = f"https://storage.googleapis.com/{bucket_name}/{file_name}"
+                try:
+                    # Cố gắng tải lên Google Cloud Storage
+                    blob = bucket.blob(file_name)
+                    blob.upload_from_filename(file_path)
+                    print(f"Đã tải lên GCP: {file_name}")
+
+                    # Xóa file cục bộ
+                    os.remove(file_path)
+                    print(f"Đã xóa file cục bộ: {file_name}")
+
+                except google_exceptions.Conflict:
+                    print(f"File {file_name} đã tồn tại trong bucket. Bỏ qua tải lên.")
+                    os.remove(file_path)
+                    print(f"Đã xóa file cục bộ: {file_name}")
+                except google_exceptions.Forbidden as e:
+                    print(f"Lỗi quyền truy cập khi tải lên {file_name}: {e}")
+                except Exception as e:
+                    print(f"Lỗi khi xử lý {file_name}: {e}")
+        
+            file_name = os.path.basename(f"{video_path}")
+            video_url = f"https://storage.googleapis.com/{bucket_name}/{file_name}"
+
             print(f"Video path: {video_path}")
+
+            upload_file(f"{video_path}")
+
             print(f"Video URL: {video_url}")
 
             return JsonResponse({
@@ -94,7 +144,6 @@ class GenerateVideoView(View):
         except Exception as e:
             print(f"Error in GenerateVideoView: {e}")
             return JsonResponse({'error': str(e)}, status=500)
-
 
 
 def csrf(request):

@@ -1,7 +1,7 @@
 from openai import OpenAI
 import os
 
-client = OpenAI(api_key="sk-proj-YwBoraiCYxQkLrxAY4SeT3BlbkFJyANuw6SIWHZ4F9AxmgCi")
+client = OpenAI(api_key="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")
 
 # Tạo vector store
 vector_store = client.beta.vector_stores.create(name="Document Store")

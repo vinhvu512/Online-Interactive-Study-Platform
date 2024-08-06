@@ -2,7 +2,7 @@ import streamlit as st
 import openai
 from openai import OpenAI
 
-client = OpenAI(api_key="sk-proj-18szzA7kkcnFLhDKFWWgT3BlbkFJ4ScHkjW4SlrNPbHW4kqZ")
+client = OpenAI(api_key="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")
 
 assistant_id = "asst_V91MJ0qJsnrLXpn4x9657GB5"
 vector_store_id = "vs_myBsbclDk12fPCUkPwVcEczs"
