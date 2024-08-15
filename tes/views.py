@@ -6,7 +6,7 @@ from .forms import PDFUploadForm
 from .models import Video
 from django.views import View
 import json
-from .gpt_processor import GPTProcessor
+from .gpt_processor import GPTProcessor, GPTProcessor2
 from django.conf import settings
 import os
 from .utils import search_arxiv
@@ -60,35 +60,39 @@ class GenerateVideoView(View):
     def post(self, request):
         try:
             data = json.loads(request.body)
-            print(data)
-            # print(request)
             pdf_url = data.get('pdfUrl')
-            print(pdf_url)
-            # if not pdf_url:
-            #     return JsonResponse({'error': 'PDF URL is required'}, status=400)
 
-            processor = GPTProcessor(api_key=settings.OPENAI_API_KEY)
+            if not pdf_url:
+                return JsonResponse({'error': 'PDF URL is required'}, status=400)
 
-            output_folder = os.path.join(settings.MEDIA_ROOT, 'generated_videos')
-            os.makedirs(output_folder, exist_ok=True)
+            # Download the PDF file
+            response = requests.get(pdf_url)
+            if response.status_code == 200:
+                output_folder = os.path.join(settings.MEDIA_ROOT, 'generated_videos')
+                os.makedirs(output_folder, exist_ok=True)
+                pdf_path = os.path.join(output_folder, 'downloaded.pdf')
+                with open(pdf_path, 'wb') as f:
+                    f.write(response.content)
+            else:
+                return JsonResponse({'error': 'Failed to download PDF'}, status=400)
 
-            video_path, descriptions, rubric, summaries, questions, durations = processor.process_pdf_to_video(
-                pdf_url, output_folder)
+            processor = GPTProcessor2(
+                openai_api_key="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",
+                anthropic_api_key="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"
+            )
+
+            # Process the downloaded PDF to generate the video
+            descriptions_file, image_files = processor.process_pdf_to_descriptions(pdf_path, output_folder)
+            final_context_file = processor.process_with_claude(descriptions_file, output_folder)
+            video_path, _, _ = processor.create_video_from_context(final_context_file, image_files, output_folder)
 
             # Correct the URL to be served via Django
             video_url = request.build_absolute_uri(
                 os.path.join(settings.MEDIA_URL, 'generated_videos', os.path.basename(video_path))
             )
 
-            print(f"Video path: {video_path}")
-            print(f"Video URL: {video_url}")
-
             return JsonResponse({
-                'videoPath': video_url,
-                'descriptions': descriptions,
-                'rubric': rubric,
-                'summaries': summaries,
-                'questions': questions
+                'videoPath': video_url
             })
 
         except Exception as e:
