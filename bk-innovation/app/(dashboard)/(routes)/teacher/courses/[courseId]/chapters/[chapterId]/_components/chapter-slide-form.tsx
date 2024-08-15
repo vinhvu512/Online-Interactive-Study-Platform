@@ -16,13 +16,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AxiosError } from "axios";
 import { PlusCircle, FileText, Pencil, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Chapter } from "@prisma/client";
 import { FileUpload } from "@/components/file-uploader";
 import { getCsrfToken } from "@/lib/utils";
+import { Loader2 } from "lucide-react"; // Import the loading icon
 
 interface ChapterSlideFormProps {
   initialData: Chapter;
@@ -45,6 +46,7 @@ export const ChapterSlideForm = ({
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [uploadedSlideUrl, setUploadedSlideUrl] = useState<string | "">("");
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
 
   const toggleEditing = () => {
     setIsEditing(!isEditing);
@@ -90,6 +92,7 @@ export const ChapterSlideForm = ({
   };
 
   const handleGenerateVideo = async () => {
+    setIsLoading(true); // Set loading to true
     try {
       const pdfUrl = initialData?.slideUrl;
       console.log("Retrieved pdfUrl:", initialData?.slideUrl);
@@ -141,6 +144,8 @@ export const ChapterSlideForm = ({
         console.error("General error:", error);
         toast.error(`Error: ${String(error)}`);
       }
+    } finally {
+      setIsLoading(false); // Set loading to false after the process
     }
   };
 
@@ -211,6 +216,13 @@ export const ChapterSlideForm = ({
           >
             Generate Video
           </Button>
+        </div>
+      )}
+
+      {isLoading && (
+        <div className="mt-4 flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-secondary" /> {/* Loading icon */}
+          <p className="ml-2">Generating video...</p>
         </div>
       )}
 

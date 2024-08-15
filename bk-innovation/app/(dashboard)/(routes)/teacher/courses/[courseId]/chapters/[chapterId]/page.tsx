@@ -11,7 +11,7 @@ import { ChapterDescriptionForm } from "@/app/(dashboard)/(routes)/teacher/cours
 import { ChapterAccessForm } from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/chapters/[chapterId]/_components/chapter-access-form";
 import { Banner } from "@/components/banner";
 import { ChapterActions } from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/chapters/[chapterId]/_components/chapter-actions";
-import UploadSelector from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/chapters/[chapterId]/_components/chapter-uploadtype";
+import { ChapterSlideForm } from "./_components/chapter-slide-form";
 const ChapterIdPage = async ({
   params,
 }: {
@@ -107,7 +107,7 @@ const ChapterIdPage = async ({
             </div>
           </div>
           {/* Use the UploadSelector client component */}
-          <UploadSelector
+          <ChapterSlideForm
             initialData={chapter}
             courseId={params.courseId}
             chapterId={params.chapterId}
