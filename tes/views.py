@@ -6,56 +6,12 @@ from .forms import PDFUploadForm
 from .models import Video
 from django.views import View
 import json
-from .gpt_processor import GPTProcessor, GPTProcessor2
+from .gpt_processor import GPTProcessor2
 from django.conf import settings
 import os
 from .utils import search_arxiv
 from django.http import JsonResponse
 import requests
-
-class UploadPDFView(View):
-    template_name = 'upload_pdf.html'
-    processor = GPTProcessor(api_key=settings.OPENAI_API_KEY)
-
-    def get(self, request):
-        form = PDFUploadForm()
-        return render(request, self.template_name, {'form': form})
-
-    def post(self, request):
-        form = PDFUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            pdf = form.save()
-            output_folder = os.path.join(settings.MEDIA_ROOT, 'videos', pdf.title)
-            os.makedirs(output_folder, exist_ok=True)
-            video_path, descriptions, rubric, summaries, questions, durations = self.processor.vip_process_pdf_to_video(
-                pdf.pdf_file.path, output_folder)
-
-            video = Video.objects.create(
-                title=pdf.title,
-                video_file=os.path.relpath(video_path, settings.MEDIA_ROOT),
-                descriptions=descriptions,
-                rubric=rubric,
-                summaries=summaries,
-                questions=questions,  # Store questions
-                durations=durations  # Store durations
-            )
-            return redirect('watch_video', video_id=video.id)
-        return render(request, self.template_name, {'form': form})
-
-
-class WatchVideoView(View):
-    template_name = 'watch_video.html'
-
-    def get(self, request, video_id):
-        video = get_object_or_404(Video, id=video_id)
-        summary = video.summaries[0]
-        related_papers = search_arxiv(summary)
-        return render(request, self.template_name, {
-            'video': video,
-            'related_papers': related_papers
-        })
-
-
 class GenerateVideoView(View):
     def post(self, request):
         try:
@@ -77,8 +33,8 @@ class GenerateVideoView(View):
                 return JsonResponse({'error': 'Failed to download PDF'}, status=400)
 
             processor = GPTProcessor2(
-                openai_api_key="",
-                anthropic_api_key=""
+                openai_api_key="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",
+                anthropic_api_key = "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"
             )
 
             # Process the downloaded PDF to generate the video

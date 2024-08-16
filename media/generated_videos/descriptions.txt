@@ -1,12 +1,14 @@
 full_content = """
 #slide1#
-Welcome to today's lecture on Modern Approaches in Natural Language Processing, or NLP. This is an incredibly dynamic field at the intersection of computer science and linguistics. As technology continues to advance, so do the techniques for enabling computers to understand, interpret, and respond to human languages.
+Welcome to the lecture on Modern Approaches in Natural Language Processing, or NLP for short. Today, we will delve into various contemporary methodologies that drive advancements in this fascinating field. As technology continues to evolve, so too does our ability to process and understand human language, enabling myriad applications from chatbots to advanced translation services. 
 
-NLP is not just about language translation or voice recognition; it encompasses a variety of applications such as sentiment analysis, summarization, and question answering. These tools are essential in fields ranging from customer service to data analytics, providing deeper insights and more intelligent automation.
+Our aim is to explore these modern approaches and understand the underlying technologies that make these advancements possible. We will touch on machine learning techniques, deep learning models, and other state-of-the-art methodologies that are pivotal to modern NLP.
 
 #slide2#
-I am Quan Thanh Tho from HCMUT, and I will be guiding you through our exploration of NLP techniques today. If you have any questions or need further explanation on any topic we cover, feel free to reach out to me via email at qttho@hcmut.edu.vn. 
+Before we dive into the content, let me introduce myself. I am Quan Thanh Tho from the Ho Chi Minh City University of Technology, also known as HCMUT. You can reach me at qttho@hcmut.edu.vn for any queries or further discussions on the subject matter. 
 
-Understanding NLP is crucial for anyone who wishes to stay at the forefront of artificial intelligence and machine learning. Let's delve into the intricate world of human language processed by machines, and demystify the cutting-edge approaches that are shaping our future interactions with technology.
+In this lecture, we will take a step-by-step approach to elucidate complex concepts and break them down into comprehensible segments. We will start with foundational principles and gradually build up to the most recent innovations in NLP. 
+
+Each part of the lecture is structured to provide both theoretical knowledge and practical insights, ensuring you have a grounded understanding that you can apply in real-world scenarios. As we proceed, feel free to reach out with questions, and I encourage active participation to make this an interactive and enriching learning experience.
 
 """
