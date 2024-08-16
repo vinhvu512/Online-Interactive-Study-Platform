@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Preview } from "@/components/preview";
 import { File } from "lucide-react";
 import { CourseProgressButton } from "@/app/(course)/courses/[courseId]/chapters/[chapterId]/_components/course-progress-button";
+import { ChainlitChatbot } from "@/app/(course)/courses/[courseId]/chapters/[chapterId]/_components/chainlit-chatbot";
 
 interface ChapterIdPageProps {
   params: {
@@ -52,7 +53,7 @@ const ChapterIdPage = async ({ params }: ChapterIdPageProps) => {
       {/*    label="You need to purchase this course to watch this chapter. "*/}
       {/*  />*/}
       {/*)}*/}
-      <div className="flex flex-col max-w-4xl mx-auto pb-20">
+      <div className="flex flex-col max-w-6xl mx-auto pb-20">
         <div className="p-2.5 mt-20">
           {chapter.videoUrl && !chapter.videoUrl.includes("utfs.io") ? (
             <div className="relative aspect-video rounded-lg shadow-lg overflow-hidden bg-gray-900">
@@ -76,6 +77,7 @@ const ChapterIdPage = async ({ params }: ChapterIdPageProps) => {
               />
             </div>
           )}
+          
           <div>
             <div className="p-4 flex flex-col md:flex-row items-center justify-between">
               <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
@@ -116,6 +118,7 @@ const ChapterIdPage = async ({ params }: ChapterIdPageProps) => {
               </>
             )}
           </div>
+          <ChainlitChatbot />
         </div>
       </div>
     </div>
