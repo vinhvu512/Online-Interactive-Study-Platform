@@ -2,23 +2,27 @@ full_content = """
 
 #slide1#
 
-Welcome, everyone! Today, we're diving into the *fascinating* world of Modern Approaches in Natural Language Processing, or NLP for short. Now, you might be thinking, "Why should I care about NLP?" Well, let me tell you - it's EVERYWHERE!!! From the moment you wake up and ask your smart speaker about the weather, to the last text you send before bed, NLP is working its magic.
+Welcome to today's lecture on "Modern Approaches in NLP." As we embark on this exciting journey, I want you to imagine the *VAST* landscape of Natural Language Processing - a field that has undergone a *DRAMATIC* transformation in recent years. 
 
-We're going to explore how technology is evolving to understand and process human language better than ever before. Imagine a world where language barriers are a thing of the past, where you can have a conversation with anyone, anywhere, in real-time. That's the power of NLP!
+Think about it: just a decade ago, machine translation was clunky and often comical. Now? We're approaching human-level performance in many language pairs. How did we get here? The answer lies in the *INCREDIBLE* advancements we've seen in computational power, data availability, and - perhaps most importantly - algorithmic sophistication.
 
-We'll be looking at machine learning techniques, deep learning models, and other cutting-edge methodologies. These aren't just buzzwords, folks - they're the building blocks of a revolution in how we interact with technology and each other.
+Now, you might be wondering, "Why should I care about these modern approaches?" Well, let me tell you - understanding these cutting-edge techniques isn't just about impressing your tech-savvy friends at parties (though that's certainly a bonus!). It's about grasping the tools that are *RESHAPING* our world. From the chatbots that handle customer service to the sentiment analysis algorithms influencing stock markets - NLP is *EVERYWHERE*.
 
-As we progress through this lecture, I want you to keep one question in mind: How can these advancements in NLP change YOUR daily life? Trust me, by the end of this session, you'll be seeing NLP opportunities everywhere you look!
+As we dive deeper into each concept, I want you to keep one question in mind: "How can I apply this in the real world?" Because that's where the *MAGIC* happens. We're not just here to learn theory - we're here to understand how these innovations are changing the way we interact with language and technology.
+
+So, buckle up! We're about to embark on a journey that will take us to the very forefront of NLP technology. And trust me, it's going to be one *HECK* of a ride!
 
 #slide2#
 
-Now, before we dive deeper, let me introduce myself. I'm Quan Thanh Tho from the Ho Chi Minh City University of Technology, or HCMUT for short. And yes, that email address on the screen? That's your lifeline to more NLP knowledge! Don't hesitate to reach out if you have questions or just want to geek out about language processing.
+Now, you've just learned about the *INCREDIBLE* advancements in NLP and why they matter. But who's going to be your guide on this exciting journey? Well, that's where I come in!
 
-You've already gotten a taste of what NLP can do from our introduction. But hold onto your seats, because we're about to take this to a whole new level! We're going to break down these complex concepts step-by-step. Think of it as building a language processing machine in your mind - we'll start with the nuts and bolts and end up with a fully functioning NLP powerhouse!
+I'm Quan Thanh Tho from HCMUT, and I'll be your captain on this voyage through the seas of Natural Language Processing. Now, I know what you're thinking - "Great, another professor with a fancy email address." But hold onto your hats, because this isn't going to be your typical, dry academic lecture!
 
-Remember how we talked about machine learning and deep learning models in the previous slide? Well, we're going to dissect these concepts and see how they form the backbone of modern NLP. And don't worry if you're feeling a bit overwhelmed - I promise we'll make this journey as smooth as a well-trained language model!
+You see, NLP isn't just my field of expertise - it's my *PASSION*. I eat, sleep, and breathe this stuff. And my goal? To infect you with the same enthusiasm! By the end of this course, I want you to be as excited about neural networks and sentiment analysis as you are about your favorite Netflix series.
 
-As we move forward, I want you to think about how each concept we discuss could be applied in the real world. Maybe you'll come up with the next big NLP innovation! After all, who wouldn't want to be the person who finally gets autocorrect to understand sarcasm, am I right???
+Remember how we talked about the real-world applications of NLP in the previous slide? Well, get ready to dive *DEEP* into those applications. We're going to build on that foundation, layer by layer, until you're not just understanding these concepts, but *APPLYING* them in ways you never thought possible.
 
-So, are you ready to embark on this NLP adventure? Let's dive in and unlock the secrets of language processing together!
+And here's the best part - this isn't a one-way street. I *WANT* to hear from you! Got a question? Ask it! Had a brilliant idea? Share it! Because that's how we're going to push the boundaries of what's possible in NLP.
+
+So, are you ready to embark on this adventure? Are you prepared to have your mind *BLOWN* by the possibilities of modern NLP? Because I promise you - by the end of this lecture, you'll never look at language the same way again!
 """

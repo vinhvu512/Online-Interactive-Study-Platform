@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AxiosError } from "axios";
-import { PlusCircle, FileText, Pencil, Trash2 } from "lucide-react";
+import { PlusCircle, FileText, Pencil, Trash2, Loader2 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -41,9 +41,10 @@ export const ChapterSlideForm = ({
   chapterId,
 }: ChapterSlideFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [isUploaded, setIsUploaded] = useState(!!initialData.slideUrl); // Track if slides are uploaded initially
+  const [isUploaded, setIsUploaded] = useState(!!initialData.slideUrl);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [uploadedSlideUrl, setUploadedSlideUrl] = useState<string | "">("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const toggleEditing = () => {
@@ -69,7 +70,7 @@ export const ChapterSlideForm = ({
 
       toast.success("Chapter updated successfully");
       toggleEditing();
-      setIsUploaded(true); // Mark slides as uploaded
+      setIsUploaded(true);
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong");
@@ -90,6 +91,7 @@ export const ChapterSlideForm = ({
   };
 
   const handleGenerateVideo = async () => {
+    setIsLoading(true);
     try {
       const pdfUrl = initialData?.slideUrl;
       console.log("Retrieved pdfUrl:", initialData?.slideUrl);
@@ -103,7 +105,6 @@ export const ChapterSlideForm = ({
         throw new Error("CSRF token not available");
       }
 
-      // Proceed with the request if pdfUrl is valid
       const response = await axios.post(
         "http://localhost:8000/watching/generate-video/",
         { pdfUrl },
@@ -141,6 +142,8 @@ export const ChapterSlideForm = ({
         console.error("General error:", error);
         toast.error(`Error: ${String(error)}`);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -208,8 +211,14 @@ export const ChapterSlideForm = ({
           <Button
             className="w-full md:w-auto block right"
             onClick={handleGenerateVideo}
+            disabled={isLoading}
           >
-            Generate Video
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+              
+            ) : (
+              "Generate Video"
+            )}
           </Button>
         </div>
       )}

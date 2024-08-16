@@ -59,7 +59,7 @@ const ChapterIdPage = async ({ params }: ChapterIdPageProps) => {
               <video
                 controls
                 src={chapter.videoUrl}
-                className="w-full h-full object-cover"
+                className="w-full h-full"
                 style={{ borderRadius: "0.5rem" }}
               ></video>
             </div>

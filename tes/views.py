@@ -12,6 +12,10 @@ import os
 from .utils import search_arxiv
 from django.http import JsonResponse
 import requests
+import dotenv
+
+dotenv.load_dotenv()
+
 class GenerateVideoView(View):
     def post(self, request):
         try:
@@ -33,8 +37,8 @@ class GenerateVideoView(View):
                 return JsonResponse({'error': 'Failed to download PDF'}, status=400)
 
             processor = GPTProcessor2(
-                # openai_api_key="",
-                # anthropic_api_key = ""
+                 openai_api_key = os.getenv('OPENAI_API_KEY'), 
+                 anthropic_api_key = os.getenv('ANTHROPIC_API_KEY')
             )
 
             # Process the downloaded PDF to generate the video

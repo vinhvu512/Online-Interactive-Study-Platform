@@ -1,14 +1,12 @@
 full_content = """
 #slide1#
-Welcome to the lecture on Modern Approaches in Natural Language Processing, or NLP for short. Today, we will delve into various contemporary methodologies that drive advancements in this fascinating field. As technology continues to evolve, so too does our ability to process and understand human language, enabling myriad applications from chatbots to advanced translation services. 
+Welcome to today's lecture on "Modern Approaches in NLP." In this session, we will delve into the advanced methodologies and innovations that have shaped the field of Natural Language Processing (NLP). The landscape of NLP has evolved dramatically over the past few years, driven by significant advancements in computational power, data availability, and algorithmic sophistication.
 
-Our aim is to explore these modern approaches and understand the underlying technologies that make these advancements possible. We will touch on machine learning techniques, deep learning models, and other state-of-the-art methodologies that are pivotal to modern NLP.
+Understanding these modern approaches is crucial not only for their theoretical significance but also for the practical applications they enable across various domains such as machine translation, sentiment analysis, chatbots, and more. As we go through each concept, I will provide in-depth explanations and real-world examples to help you grasp the material fully. Let’s get started on this exciting journey into the forefront of NLP technology.
 
 #slide2#
-Before we dive into the content, let me introduce myself. I am Quan Thanh Tho from the Ho Chi Minh City University of Technology, also known as HCMUT. You can reach me at qttho@hcmut.edu.vn for any queries or further discussions on the subject matter. 
+I am Quan Thanh Tho from HCMUT, and I will be guiding you through this course. Feel free to reach out to me at qttho@hcmut.edu.vn for any queries or further discussions. My background and expertise lie deeply in this field, and I am passionate about sharing the latest advancements and intricate details of NLP with you. This course is designed to be interactive, so I welcome your questions and active participation.
 
-In this lecture, we will take a step-by-step approach to elucidate complex concepts and break them down into comprehensible segments. We will start with foundational principles and gradually build up to the most recent innovations in NLP. 
-
-Each part of the lecture is structured to provide both theoretical knowledge and practical insights, ensuring you have a grounded understanding that you can apply in real-world scenarios. As we proceed, feel free to reach out with questions, and I encourage active participation to make this an interactive and enriching learning experience.
+As we move forward, each slide will build upon the previous one, adding layers of complexity and detail. By the end of this lecture, you should have a comprehensive understanding of modern NLP techniques and be able to apply them to various practical scenarios. Let’s dive into the fascinating world of Natural Language Processing!
 
 """
