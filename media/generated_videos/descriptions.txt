@@ -1,0 +1,12 @@
+full_content = """
+#slide1#
+Welcome to today's lecture on Modern Approaches in Natural Language Processing, or NLP. This is an incredibly dynamic field at the intersection of computer science and linguistics. As technology continues to advance, so do the techniques for enabling computers to understand, interpret, and respond to human languages.
+
+NLP is not just about language translation or voice recognition; it encompasses a variety of applications such as sentiment analysis, summarization, and question answering. These tools are essential in fields ranging from customer service to data analytics, providing deeper insights and more intelligent automation.
+
+#slide2#
+I am Quan Thanh Tho from HCMUT, and I will be guiding you through our exploration of NLP techniques today. If you have any questions or need further explanation on any topic we cover, feel free to reach out to me via email at qttho@hcmut.edu.vn. 
+
+Understanding NLP is crucial for anyone who wishes to stay at the forefront of artificial intelligence and machine learning. Let's delve into the intricate world of human language processed by machines, and demystify the cutting-edge approaches that are shaping our future interactions with technology.
+
+"""

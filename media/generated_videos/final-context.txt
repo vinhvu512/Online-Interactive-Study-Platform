@@ -1,0 +1,26 @@
+full_content = """
+
+#slide1#
+
+Alright, let's dive right into the fascinating world of Natural Language Processing, or NLP as we like to call it in the field. *Exciting*, isn't it? 
+
+Now, you might be thinking, "Oh great, another tech buzzword." But let me tell you, NLP is SO much more than that! It's the *beating heart* of how we're teaching machines to understand us - yes, us humans with all our linguistic quirks and nuances.
+
+Imagine a world where your computer doesn't just process your words, but actually *understands* them. That's what we're working towards, folks! From deciphering the sentiment behind your latest tweet to summarizing that 50-page report you've been avoiding - NLP is the unsung hero making it all possible.
+
+And let me tell you, it's not just about making our lives easier (though that's a pretty sweet bonus). NLP is revolutionizing industries left and right! Customer service chatbots that actually *help* instead of frustrate? That's NLP. Data analytics that can sift through millions of comments and tell you what your customers *really* think? You guessed it - NLP again!
+
+So buckle up, because we're about to embark on a journey that's shaping the very future of human-machine interaction. Trust me, by the end of this lecture, you'll be seeing NLP *EVERYWHERE*!
+
+#slide2#
+
+Now that we've got our feet wet in the world of NLP, let me introduce myself properly. I'm Quan Thanh Tho, coming to you from HCMUT, and I'll be your guide through this linguistic labyrinth we call Natural Language Processing.
+
+You've already gotten a taste of how *crucial* NLP is in our increasingly digital world. But here's the kicker - it's evolving *faster* than you can say "artificial intelligence"! That's why staying on top of these modern approaches isn't just important, it's *essential* for anyone who wants to ride the AI wave.
+
+Now, I know what you're thinking: "Professor Tho, this all sounds great, but what if I get lost in the technical jargon?" Well, fear not! I'm here to be your NLP sherpa. If at any point you feel like you're drowning in a sea of algorithms and neural networks, just shoot me an email at qttho@hcmut.edu.vn. I promise I don't bite - unless you're a particularly tricky bit of code, that is! *wink*
+
+As we move forward, keep in mind how the foundations of NLP we've touched on - language understanding, interpretation, and generation - will play into the more advanced concepts we'll explore. These building blocks are *crucial* for grasping the cutting-edge approaches we'll dive into next.
+
+Remember, folks, we're not just learning about technology here. We're peering into the future of how humans and machines will communicate. So let's roll up our sleeves and get ready to demystify the magic behind those eerily accurate autocomplete suggestions and voice assistants. Trust me, by the end of this, you'll never look at your smartphone the same way again!
+"""
