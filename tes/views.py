@@ -33,8 +33,8 @@ class GenerateVideoView(View):
                 return JsonResponse({'error': 'Failed to download PDF'}, status=400)
 
             processor = GPTProcessor2(
-                openai_api_key="",
-                anthropic_api_key = ""
+                # openai_api_key="",
+                # anthropic_api_key = ""
             )
 
             # Process the downloaded PDF to generate the video
