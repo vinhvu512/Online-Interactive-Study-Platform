@@ -116,7 +116,15 @@ export async function PATCH(
         id: params.chapterId,
         courseId: params.courseId,
       },
-      data: { ...values },
+      data: {
+        title: values.title,
+        description: values.description,
+        slideUrl: values.slideUrl,
+        videoUrl: values.videoUrl,
+        isPublished: values.isPublished,
+        isFree: values.isFree,
+        position: values.position,
+      },
     });
 
     //Handle video upload
@@ -128,7 +136,12 @@ export async function PATCH(
       });
 
       if (existingMuxData) {
-        await video.assets.delete(existingMuxData.assetId);
+        try {
+          await video.assets.delete(existingMuxData.assetId);
+        } catch (error) {
+          console.log("Error deleting Mux asset:", error);
+          // If the asset doesn't exist, we can ignore this error
+        }
         await db.muxData.delete({
           where: {
             id: existingMuxData.id,
@@ -136,19 +149,25 @@ export async function PATCH(
         });
       }
 
-      const asset = await video.assets.create({
-        input: values.videoUrl,
-        playback_policy: ["public"],
-        test: false,
-      });
+      try {
+        const asset = await video.assets.create({
+          input: values.videoUrl,
+          playback_policy: ["public"],
+          test: false,
+        });
 
-      await db.muxData.create({
-        data: {
-          chapterId: params.chapterId,
-          assetId: asset.id,
-          playbackId: asset.playback_ids?.[0]?.id,
-        },
-      });
+        await db.muxData.create({
+          data: {
+            chapterId: params.chapterId,
+            assetId: asset.id,
+            playbackId: asset.playback_ids?.[0]?.id,
+          },
+        });
+      } catch (error) {
+        console.log("Error creating Mux asset:", error);
+        // If there's an error creating the Mux asset, we should still update the chapter
+        // but we won't have Mux data associated with it
+      }
     }
 
     return NextResponse.json(chapter);

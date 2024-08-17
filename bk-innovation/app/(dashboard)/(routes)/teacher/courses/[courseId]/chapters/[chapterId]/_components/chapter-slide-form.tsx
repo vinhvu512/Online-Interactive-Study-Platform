@@ -42,7 +42,7 @@ export const ChapterSlideForm = ({
 }: ChapterSlideFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isUploaded, setIsUploaded] = useState(!!initialData.slideUrl);
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [videoUrl, setVideoUrl] = useState<string | null>(initialData?.videoUrl);
   const [uploadedSlideUrl, setUploadedSlideUrl] = useState<string | "">("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -59,18 +59,20 @@ export const ChapterSlideForm = ({
     },
   });
 
-  const { isSubmitting, isValid } = form.formState;
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: Partial<z.infer<typeof formSchema>>) => {
     try {
+      const updatedValues = {
+        slideUrl: values.slideUrl,
+        videoUrl: values.videoUrl,
+      };
       await axios.patch(
         `/api/courses/${courseId}/chapters/${chapterId}`,
-        values,
+        updatedValues,
       );
 
       toast.success("Chapter updated successfully");
       toggleEditing();
-      setIsUploaded(true);
+      setIsUploaded(!!updatedValues.slideUrl);
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong");
@@ -120,7 +122,12 @@ export const ChapterSlideForm = ({
         const { videoPath } = response.data;
         toast.success("Video generated successfully");
         setVideoUrl(videoPath);
-        onSubmit({ slideUrl: uploadedSlideUrl, videoUrl: videoPath });
+        
+        // Update the chapter with the new videoUrl
+        await onSubmit({ videoUrl: videoPath });
+        
+        // Refresh the page to reflect the changes
+        router.refresh();
       } else {
         toast.error("Failed to generate video");
       }
