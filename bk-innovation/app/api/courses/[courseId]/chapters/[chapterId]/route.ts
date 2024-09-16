@@ -98,7 +98,6 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Ensure this user owns the course
     const ownCourse = await db.course.findUnique({
       where: {
         id: params.courseId,
@@ -110,65 +109,21 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Update chapter
+    // Parse JSON strings if they exist
+    const multipleChoice = values.multipleChoice ? JSON.parse(values.multipleChoice) : undefined;
+    const arxivPapers = values.arxivPapers ? JSON.parse(values.arxivPapers) : undefined;
+
     const chapter = await db.chapter.update({
       where: {
         id: params.chapterId,
         courseId: params.courseId,
       },
       data: {
-        title: values.title,
-        description: values.description,
-        slideUrl: values.slideUrl,
-        videoUrl: values.videoUrl,
-        isPublished: values.isPublished,
-        isFree: values.isFree,
-        position: values.position,
+        ...values,
+        multipleChoice,
+        arxivPapers,
       },
     });
-
-    //Handle video upload
-    if (values.videoUrl) {
-      const existingMuxData = await db.muxData.findFirst({
-        where: {
-          chapterId: params.chapterId,
-        },
-      });
-
-      if (existingMuxData) {
-        try {
-          await video.assets.delete(existingMuxData.assetId);
-        } catch (error) {
-          console.log("Error deleting Mux asset:", error);
-          // If the asset doesn't exist, we can ignore this error
-        }
-        await db.muxData.delete({
-          where: {
-            id: existingMuxData.id,
-          },
-        });
-      }
-
-      try {
-        const asset = await video.assets.create({
-          input: values.videoUrl,
-          playback_policy: ["public"],
-          test: false,
-        });
-
-        await db.muxData.create({
-          data: {
-            chapterId: params.chapterId,
-            assetId: asset.id,
-            playbackId: asset.playback_ids?.[0]?.id,
-          },
-        });
-      } catch (error) {
-        console.log("Error creating Mux asset:", error);
-        // If there's an error creating the Mux asset, we should still update the chapter
-        // but we won't have Mux data associated with it
-      }
-    }
 
     return NextResponse.json(chapter);
   } catch (error) {
@@ -176,3 +131,4 @@ export async function PATCH(
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
+

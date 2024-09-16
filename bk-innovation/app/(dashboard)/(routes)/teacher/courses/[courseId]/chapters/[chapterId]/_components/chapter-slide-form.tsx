@@ -96,7 +96,6 @@ export const ChapterSlideForm = ({
     setIsLoading(true);
     try {
       const pdfUrl = initialData?.slideUrl;
-      console.log("Retrieved pdfUrl:", initialData?.slideUrl);
       if (!pdfUrl) {
         toast.error("PDF URL is required");
         return;
@@ -109,24 +108,29 @@ export const ChapterSlideForm = ({
 
       const response = await axios.post(
         "http://localhost:8000/watching/generate-video/",
-        { pdfUrl },
+        { pdfUrl, chapterId },
         {
           headers: {
             "X-CSRFToken": csrfToken,
           },
           withCredentials: true,
-        },
+        }
       );
 
       if (response.status === 200) {
-        const { videoPath } = response.data;
+        const { videoPath, contentId, summary, multipleChoice, arxivPapers } = response.data;
         toast.success("Video generated successfully");
+
+        // Update the chapter with the new information
+        await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, {
+          videoUrl: videoPath,
+          summary,
+          multipleChoice: JSON.stringify(multipleChoice),
+          arxivPapers: JSON.stringify(arxivPapers),
+        });
+
         setVideoUrl(videoPath);
-        
-        // Update the chapter with the new videoUrl
-        await onSubmit({ videoUrl: videoPath });
-        
-        // Refresh the page to reflect the changes
+        toast.success("Chapter updated successfully");
         router.refresh();
       } else {
         toast.error("Failed to generate video");
