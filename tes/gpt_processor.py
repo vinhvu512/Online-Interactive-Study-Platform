@@ -165,9 +165,8 @@ class GPTProcessor2:
 
             start = end + 1
 
-        final_context_file = os.path.join(output_folder, "final-context.txt")
-        self.write_file(final_context_file, full_content)
-        return final_context_file
+        self.write_file(output_file, full_content)
+        return output_file
 
     def create_video_from_context(self, final_context_file, image_files, output_folder):
         with open(final_context_file, 'r', encoding='utf-8') as f:

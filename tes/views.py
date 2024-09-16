@@ -5,10 +5,12 @@ from django.views import View
 import json
 from django.conf import settings
 import os
+from datetime import datetime
+import uuid
 from django.http import JsonResponse
 import requests
 from django.core.files import File
-from .utils import search_arxiv, generate_summary, generate_multiple_choice
+from .utils import search_arxiv, generate_summary, generate_multiple_choice, generate_main_content
 from .gpt_processor import GPTProcessor2
 from .models import Video, GeneratedContent
 from dotenv import load_dotenv
@@ -44,15 +46,31 @@ class GenerateVideoView(View):
 
             # Process the downloaded PDF to generate the video
             descriptions_file, image_files = processor.process_pdf_to_descriptions(pdf_path, output_folder)
-            final_context_file = processor.process_with_claude(descriptions_file, output_folder)
+            
+            # Generate a unique filename for the final context file
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            unique_id = uuid.uuid4().hex[:8]
+            final_context_filename = f"context_{timestamp}_{unique_id}.txt"
+            
+            # Create the directory if it doesn't exist
+            generated_contents_dir = os.path.join(settings.MEDIA_ROOT, 'generated_contents')
+            os.makedirs(generated_contents_dir, exist_ok=True)
+            
+            # Set the path for the final context file
+            final_context_file = os.path.join(generated_contents_dir, final_context_filename)
+            
+            # Process with Claude and save the result to the new location
+            processor.process_with_claude(descriptions_file, final_context_file)
+            
             video_path, _, _ = processor.create_video_from_context(final_context_file, image_files, output_folder)
-
+            
             # Generate summary, multiple-choice questions, and find arXiv papers
             with open(final_context_file, 'r') as f:
                 context = f.read()
+            main_topics = generate_main_content(context)
             summary = generate_summary(context)
-            multiple_choice = generate_multiple_choice(context)
-            arxiv_papers = search_arxiv(context, max_results=3)
+            multiple_choice = generate_multiple_choice(main_topics)
+            arxiv_papers = search_arxiv(main_topics, max_results=5)
 
             # Save the video and content file
             video_filename = os.path.basename(video_path)
@@ -91,7 +109,8 @@ class GenerateVideoView(View):
                 'contentId': generated_content.id,
                 'summary': summary,
                 'multipleChoice': multiple_choice,
-                'arxivPapers': arxiv_papers
+                'arxivPapers': arxiv_papers,
+                'finalContextFile': os.path.relpath(final_context_file, settings.MEDIA_ROOT)
             })
 
         except Exception as e:
