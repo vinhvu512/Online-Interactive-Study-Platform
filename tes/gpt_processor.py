@@ -130,7 +130,7 @@ class GPTProcessor2:
         self.save_descriptions(descriptions, descriptions_file)
         return descriptions_file, image_files
 
-    def process_with_claude(self, descriptions_file, output_folder):
+    def process_with_claude(self, descriptions_file, output_file):
         full_content = self.read_file(descriptions_file)
         total_slides = len(re.findall(r'#slide\d+#', full_content))
 
