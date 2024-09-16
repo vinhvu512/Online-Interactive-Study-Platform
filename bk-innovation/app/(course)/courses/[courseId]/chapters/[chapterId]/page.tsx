@@ -14,12 +14,20 @@ import { Preview } from "@/components/preview";
 import { File } from "lucide-react";
 import { CourseProgressButton } from "@/app/(course)/courses/[courseId]/chapters/[chapterId]/_components/course-progress-button";
 import { ChainlitChatbot } from "@/app/(course)/courses/[courseId]/chapters/[chapterId]/_components/chainlit-chatbot";
+import { MultipleChoiceQuestions } from './_components/multiple-choice-questions';
+import { ArxivPapers } from './_components/arxiv-papers';
 
 interface ChapterIdPageProps {
   params: {
     courseId: string;
     chapterId: string;
   };
+}
+
+interface Question {
+  question: string;
+  options: string[];
+  answer: string;
 }
 
 const ChapterIdPage = async ({ params }: ChapterIdPageProps) => {
@@ -29,16 +37,24 @@ const ChapterIdPage = async ({ params }: ChapterIdPageProps) => {
     return redirect("/");
   }
 
-  const { chapter, course, muxData, attachments, nextChapter, userProgress } =
-    await getChapter({
-      userId,
-      chapterId: params.chapterId,
-      courseId: params.courseId,
-    });
+  const { 
+    chapter, 
+    course, 
+    muxData, 
+    attachments, 
+    nextChapter, 
+    userProgress,
+  } = await getChapter({
+    userId,
+    chapterId: params.chapterId,
+    courseId: params.courseId,
+  });
 
   if (!chapter || !course) {
     return redirect("/");
   }
+
+  const multipleChoice = chapter.multipleChoice as Question[] | null;
 
   // const isLocked = !chapter.isFree;
   const completeOnEnd = !userProgress?.isCompleted;
@@ -99,6 +115,24 @@ const ChapterIdPage = async ({ params }: ChapterIdPageProps) => {
             <div>
               <Preview value={chapter.description!} />
             </div>
+            {multipleChoice && (
+              <>
+                <Separator />
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold mb-2">Multiple Choice Questions</h3>
+                  <MultipleChoiceQuestions questions={multipleChoice} />
+                </div>
+              </>
+            )}
+            {chapter?.arxivPapers && (
+              <>
+                <Separator />
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold mb-2">Related arXiv Papers</h3>
+                  <ArxivPapers papers={chapter.arxivPapers} />
+                </div>
+              </>
+            )}
             {!!attachments.length && (
               <>
                 <Separator />
