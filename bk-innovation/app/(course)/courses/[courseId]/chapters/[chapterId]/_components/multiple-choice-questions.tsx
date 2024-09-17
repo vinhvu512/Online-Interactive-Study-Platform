@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 interface Question {
   question: string;
   options: string[];
-  answer: string;
+  answer: number;
 }
 
 interface MultipleChoiceQuestionsProps {
@@ -12,12 +12,12 @@ interface MultipleChoiceQuestionsProps {
 }
 
 export const MultipleChoiceQuestions: React.FC<MultipleChoiceQuestionsProps> = ({ questions }) => {
-  const [userAnswers, setUserAnswers] = useState<{ [key: number]: string | null }>({});
+  const [userAnswers, setUserAnswers] = useState<{ [key: number]: number | null }>({});
   const [feedback, setFeedback] = useState<{ [key: number]: boolean | null }>({});
 
-  const handleAnswer = (questionIndex: number, selectedOption: string) => {
-    setUserAnswers(prev => ({ ...prev, [questionIndex]: selectedOption }));
-    const isCorrect = selectedOption === questions[questionIndex].answer;
+  const handleAnswer = (questionIndex: number, selectedOptionIndex: number) => {
+    setUserAnswers(prev => ({ ...prev, [questionIndex]: selectedOptionIndex }));
+    const isCorrect = selectedOptionIndex === questions[questionIndex].answer;
     setFeedback(prev => ({ ...prev, [questionIndex]: isCorrect }));
   };
 
@@ -39,9 +39,9 @@ export const MultipleChoiceQuestions: React.FC<MultipleChoiceQuestionsProps> = (
             {q.options.map((option, optionIndex) => (
               <li key={optionIndex} className="mb-2">
                 <button
-                  onClick={() => handleAnswer(index, option)}
+                  onClick={() => handleAnswer(index, optionIndex)}
                   className={`w-full text-left p-2 rounded ${
-                    userAnswers[index] === option
+                    userAnswers[index] === optionIndex
                       ? feedback[index]
                         ? 'bg-green-200'
                         : 'bg-red-200'
@@ -53,13 +53,13 @@ export const MultipleChoiceQuestions: React.FC<MultipleChoiceQuestionsProps> = (
               </li>
             ))}
           </ul>
-          {feedback[index] !== null && (
-            <div className={`mt-2 p-2 rounded ${feedback[index] ? 'bg-green-100' : 'bg-red-100'}`}>
-              {feedback[index] ? 'Correct!' : `Incorrect. The correct answer is: ${q.answer}`}
+          {feedback[index] === false && (
+            <div className="mt-2 p-2 rounded bg-red-100">
+              Incorrect
             </div>
           )}
         </div>
       ))}
     </div>
   );
-};
+}

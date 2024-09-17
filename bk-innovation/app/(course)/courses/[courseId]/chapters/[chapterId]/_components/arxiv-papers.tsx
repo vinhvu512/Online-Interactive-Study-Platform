@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface Paper {
+interface ArxivPaper {
   title: string;
-  url: string;
+  link: string;
 }
 
 interface ArxivPapersProps {
-  papers: Paper[];
+  papers: ArxivPaper[];
 }
 
 export const ArxivPapers: React.FC<ArxivPapersProps> = ({ papers }) => {
@@ -14,7 +14,7 @@ export const ArxivPapers: React.FC<ArxivPapersProps> = ({ papers }) => {
     <div>
       {papers.map((paper, index) => (
         <div key={index} className="mb-2">
-          <a href={paper.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+          <a href={paper.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
             {paper.title}
           </a>
         </div>

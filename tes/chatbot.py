@@ -16,7 +16,7 @@ PERSIST_DIR = "./storage"
 
 @cl.on_chat_start
 async def start():
-    content_folder = os.path.expanduser("~/Documents/GitHub/LMS/media/generated_contents")
+    content_folder = os.path.join(os.path.dirname(__file__), "..", "media", "generated_contents")
     if not os.path.exists(content_folder):
         raise FileNotFoundError(f"The folder {content_folder} does not exist.")
     
@@ -41,16 +41,24 @@ async def start():
                 file_path = os.path.join(content_folder, file)
                 if os.path.exists(file_path):
                     try:
-                        doc = Document.from_file(file_path)
-                        new_documents.append(doc)
+                        # Sử dụng SimpleDirectoryReader để đọc file
+                        reader = SimpleDirectoryReader(input_files=[file_path])
+                        docs = reader.load_data()
+                        new_documents.extend(docs)
                     except Exception as e:
                         print(f"Error reading file {file}: {str(e)}")
             
             if new_documents:
                 print(f"Adding {len(new_documents)} new documents to the index")
-                index.insert_documents(new_documents)
-                index.storage_context.persist(persist_dir=PERSIST_DIR)
-                print("Updated index saved to storage")
+                # Convert documents to nodes
+                nodes = index.storage_context.docstore.add_documents(new_documents)
+                if nodes:  # Kiểm tra xem nodes có tồn tại không
+                    # Insert nodes into the index
+                    index.insert_nodes(nodes)
+                    index.storage_context.persist(persist_dir=PERSIST_DIR)
+                    print("Updated index saved to storage")
+                else:
+                    print("No nodes were created from the new documents")
             else:
                 print("No new documents were successfully read")
     else:

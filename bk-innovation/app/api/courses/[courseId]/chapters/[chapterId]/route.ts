@@ -110,8 +110,12 @@ export async function PATCH(
     }
 
     // Parse JSON strings if they exist
-    const multipleChoice = values.multipleChoice ? JSON.parse(values.multipleChoice) : undefined;
-    const arxivPapers = values.arxivPapers ? JSON.parse(values.arxivPapers) : undefined;
+    const multipleChoice = typeof values.multipleChoice === 'string' 
+      ? JSON.parse(values.multipleChoice) 
+      : values.multipleChoice || {};
+    const arxivPapers = typeof values.arxivPapers === 'string'
+      ? JSON.parse(values.arxivPapers)
+      : values.arxivPapers || {};
 
     const chapter = await db.chapter.update({
       where: {

@@ -23,9 +23,9 @@ def search_arxiv(query, max_results=5):
             title = entry.find("{http://www.w3.org/2005/Atom}title").text
             link = entry.find("{http://www.w3.org/2005/Atom}id").text
             papers.append({"title": title, "link": link})
-        return json.dumps({"arxiv_results": papers}, indent=2)
+        return {"arxiv_results": papers}
     else:
-        return json.dumps({"arxiv_results": []}, indent=2)
+        return {"arxiv_results": []}
 
 def generate_main_content(file_content):
     response = client.chat.completions.create(
@@ -74,7 +74,8 @@ Content: {context}"""}
         }
         questions.append(question)
     
-    return json.dumps({"multiple_choice_questions": questions}, indent=2)
+    return {"multiple_choice_questions": questions}
+
 def generate_summary(context):
     response = client.chat.completions.create(
         model="gpt-4o-mini",
