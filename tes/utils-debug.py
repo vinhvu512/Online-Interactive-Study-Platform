@@ -4,9 +4,11 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 import json
+
 load_dotenv()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
 def search_arxiv(query, max_results=5):
     url = "http://export.arxiv.org/api/query"
     params = {
@@ -23,9 +25,9 @@ def search_arxiv(query, max_results=5):
             title = entry.find("{http://www.w3.org/2005/Atom}title").text
             link = entry.find("{http://www.w3.org/2005/Atom}id").text
             papers.append({"title": title, "link": link})
-        return {"arxiv_results": papers}
+        return json.dumps({"arxiv_results": papers}, indent=2)
     else:
-        return {"arxiv_results": []}
+        return json.dumps({"arxiv_results": []}, indent=2)
 
 def generate_main_content(file_content):
     response = client.chat.completions.create(
@@ -74,19 +76,27 @@ Content: {context}"""}
         }
         questions.append(question)
     
-    return {"multiple_choice_questions": questions}
+    return json.dumps({"multiple_choice_questions": questions}, indent=2)
 
-def generate_summary(context):
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant that summarizes content."},
-            {"role": "user", "content": f"Summarize the following content:\n\n{context}"}
-        ],
-        max_tokens=150,
-        temperature=0.5,
-    )
-    return response.choices[0].message.content.strip()
+# Main execution
+with open('/Users/twang/Downloads/tes_folder_for_bki/after_batch_4.txt', 'r') as file:
+    file_loaded = file.read()
 
+print("File Content:")
+print(file_loaded[:500] + "...")  # Print first 500 characters
+print("\n" + "="*50 + "\n")
 
+main_topics = generate_main_content(file_loaded)
+print("Main Topics:")
+print(main_topics)
+print("\n" + "="*50 + "\n")
 
+arxiv_results_json = search_arxiv(main_topics, max_results=3)
+print("arXiv Search Results (JSON format):")
+print(arxiv_results_json)
+print("\n" + "="*50 + "\n")
+
+mc_questions_json = generate_multiple_choice(file_loaded)
+print("Multiple Choice Questions (JSON format):")
+print(mc_questions_json)
+print("\n" + "="*50 + "\n")

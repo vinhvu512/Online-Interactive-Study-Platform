@@ -1,12 +1,18 @@
 full_content = """
 #slide1#
-Welcome to today's lecture on "Modern Approaches in NLP." In this session, we will delve into the advanced methodologies and innovations that have shaped the field of Natural Language Processing (NLP). The landscape of NLP has evolved dramatically over the past few years, driven by significant advancements in computational power, data availability, and algorithmic sophistication.
+Welcome to today’s lecture on “Modern Approaches in NLP,” presented by Quan Thanh Tho. This topic is crucial in understanding how Natural Language Processing (NLP) has evolved and the different methodologies that are at the forefront of this transformation. Firstly, let's delve into the significance of NLP in the contemporary technological landscape. As we all know, NLP stands for Natural Language Processing, and it's a subfield of artificial intelligence that focuses on the interaction between computers and human language. By enabling computers to understand and process human language, NLP opens a myriad of opportunities in various applications such as machine translation, sentiment analysis, chatbots, and more.
 
-Understanding these modern approaches is crucial not only for their theoretical significance but also for the practical applications they enable across various domains such as machine translation, sentiment analysis, chatbots, and more. As we go through each concept, I will provide in-depth explanations and real-world examples to help you grasp the material fully. Let’s get started on this exciting journey into the forefront of NLP technology.
+Transitioning to the advancements in NLP, we must consider the journey from traditional rule-based approaches to the data-driven techniques involving machine learning and deep learning. Traditional methods relied heavily on handcrafted rules and linguistic knowledge, which were limited and time-consuming. However, modern methods adopt data-driven approaches using large corpora and sophisticated algorithms to uncover patterns and understand language contextually.
 
 #slide2#
-I am Quan Thanh Tho from HCMUT, and I will be guiding you through this course. Feel free to reach out to me at qttho@hcmut.edu.vn for any queries or further discussions. My background and expertise lie deeply in this field, and I am passionate about sharing the latest advancements and intricate details of NLP with you. This course is designed to be interactive, so I welcome your questions and active participation.
+Here's more about who will be guiding you through this journey. Our lecturer for this series, Quan Thanh Tho, is associated with Ho Chi Minh City University of Technology (HCMUT). With a robust background in NLP and related fields, you can anticipate a series of lectures that blend theoretical depth with practical insights.
 
-As we move forward, each slide will build upon the previous one, adding layers of complexity and detail. By the end of this lecture, you should have a comprehensive understanding of modern NLP techniques and be able to apply them to various practical scenarios. Let’s dive into the fascinating world of Natural Language Processing!
+If you have any questions or need further clarification on any topic covered during these lectures, feel free to reach out to Quan Thanh Tho via email at qttho@hcmut.edu.vn. Having such a resource available will ensure that your understanding of the topics is comprehensive and robust.
+
+Now, let us segue into the foundational concepts that underline modern NLP approaches. It is crucial to understand the transition from traditional to modern NLP methodologies and the techniques involved in this evolution. From there, we can further explore the core sections of this subject, including supervised learning techniques, neural network architectures, and the application of transformer models such as BERT and GPT-3 in revolutionizing NLP tasks.
+
+In the forthcoming slides, we'll dive deeper into each category, starting with the basic principles and moving towards more complex and current applications in the field of NLP. Moving on, we will also discuss the challenges faced in NLP, such as syntactic ambiguity, semantic understanding, and the scarcity of annotated data, and how modern approaches aim to resolve these issues.
+
+By the end of this lecture series, you should have a solid grasp of modern NLP approaches, enabling you to apply this knowledge effectively in your projects or research. Let’s get started on this exciting journey into the world of Natural Language Processing!
 
 """

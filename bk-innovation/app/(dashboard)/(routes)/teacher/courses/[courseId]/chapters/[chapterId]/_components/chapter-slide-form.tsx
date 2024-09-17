@@ -42,7 +42,7 @@ export const ChapterSlideForm = ({
 }: ChapterSlideFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isUploaded, setIsUploaded] = useState(!!initialData.slideUrl);
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [videoUrl, setVideoUrl] = useState<string | null>(initialData?.videoUrl);
   const [uploadedSlideUrl, setUploadedSlideUrl] = useState<string | "">("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -59,18 +59,20 @@ export const ChapterSlideForm = ({
     },
   });
 
-  const { isSubmitting, isValid } = form.formState;
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: Partial<z.infer<typeof formSchema>>) => {
     try {
+      const updatedValues = {
+        slideUrl: values.slideUrl,
+        videoUrl: values.videoUrl,
+      };
       await axios.patch(
         `/api/courses/${courseId}/chapters/${chapterId}`,
-        values,
+        updatedValues,
       );
 
       toast.success("Chapter updated successfully");
       toggleEditing();
-      setIsUploaded(true);
+      setIsUploaded(!!updatedValues.slideUrl);
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong");
@@ -94,7 +96,6 @@ export const ChapterSlideForm = ({
     setIsLoading(true);
     try {
       const pdfUrl = initialData?.slideUrl;
-      console.log("Retrieved pdfUrl:", initialData?.slideUrl);
       if (!pdfUrl) {
         toast.error("PDF URL is required");
         return;
@@ -107,20 +108,30 @@ export const ChapterSlideForm = ({
 
       const response = await axios.post(
         "http://localhost:8000/watching/generate-video/",
-        { pdfUrl },
+        { pdfUrl, chapterId },
         {
           headers: {
             "X-CSRFToken": csrfToken,
           },
           withCredentials: true,
-        },
+        }
       );
 
       if (response.status === 200) {
-        const { videoPath } = response.data;
+        const { videoPath, contentId, summary, multipleChoice, arxivPapers } = response.data;
         toast.success("Video generated successfully");
+
+        // Update the chapter with the new information
+        await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, {
+          videoUrl: videoPath,
+          summary,
+          multipleChoice: JSON.stringify(multipleChoice),
+          arxivPapers: JSON.stringify(arxivPapers),
+        });
+
         setVideoUrl(videoPath);
-        onSubmit({ slideUrl: uploadedSlideUrl, videoUrl: videoPath });
+        toast.success("Chapter updated successfully");
+        router.refresh();
       } else {
         toast.error("Failed to generate video");
       }

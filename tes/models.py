@@ -18,3 +18,11 @@ class Video(models.Model):
 
     def __str__(self):
         return self.title
+
+class GeneratedContent(models.Model):
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='generated_content')
+    content_file = models.FileField(upload_to='generated_content/')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Content for {self.video.title}"

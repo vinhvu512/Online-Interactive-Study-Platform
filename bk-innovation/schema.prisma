@@ -67,6 +67,9 @@ model Chapter {
   position    Int
   isPublished Boolean @default(false)
   isFree      Boolean @default(true)
+  summary     String? @db.Text
+  multipleChoice Json?
+  arxivPapers   Json?
 
   muxData MuxData?
 

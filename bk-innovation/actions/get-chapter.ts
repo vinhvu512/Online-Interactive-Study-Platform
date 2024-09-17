@@ -72,8 +72,15 @@ export const getChapter = async ({
       },
     });
 
+    const parsedMultipleChoice = typeof chapter.multipleChoice === 'string' ? JSON.parse(chapter.multipleChoice) : chapter.multipleChoice;
+    const parsedArxivPapers = typeof chapter.arxivPapers === 'string' ? JSON.parse(chapter.arxivPapers) : chapter.arxivPapers;
+
     return {
-      chapter,
+      chapter: {
+        ...chapter,
+        multipleChoice: parsedMultipleChoice,
+        arxivPapers: parsedArxivPapers,
+      },
       course,
       muxData,
       attachments,

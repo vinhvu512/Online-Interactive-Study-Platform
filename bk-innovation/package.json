@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chainlit/react-client": "^0.1.2",
     "@clerk/nextjs": "^5.1.5",
     "@hello-pangea/dnd": "^16.6.0",
     "@hookform/resolvers": "^3.6.0",
