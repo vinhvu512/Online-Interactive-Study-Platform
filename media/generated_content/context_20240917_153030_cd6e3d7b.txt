@@ -1,0 +1,22 @@
+full_content = """
+
+#slide1#
+
+Alright, let's dive right into our fascinating topic for today: "Modern Approaches in NLP." As we embark on this journey together, I want you to imagine the *INCREDIBLE* potential of machines understanding and generating human language. It's not science fiction anymore, folks!
+
+Natural Language Processing, or NLP as we affectionately call it, is at the heart of artificial intelligence's interaction with human languages. Think about it - every time you ask Siri a question or chat with a customer service bot, you're experiencing NLP in action! 
+
+Now, why is this field so *CRUCIAL*??? Well, it's the key to unlocking a world where machines can truly understand us, not just process our words. From machine translation that breaks down language barriers, to sentiment analysis that can gauge the mood of millions of social media posts, to conversational agents that can provide companionship to the elderly - the applications are ENDLESS!
+
+As we progress through this lecture, I want you to keep one question in mind: "How can these NLP approaches revolutionize MY field of study or work?" Trust me, the answers might surprise you!
+
+#slide2#
+
+Now that we've set the stage, let me quickly introduce myself. I'm Quan Thanh Tho, and I have the pleasure of being associated with HCMUT. But enough about me - I'm much more interested in YOU and your journey into the world of NLP!
+
+I want to emphasize something *CRUCIAL* here - our learning doesn't stop when this lecture ends. If you find yourself lying awake at night, pondering the intricacies of language models (and who doesn't, right?), don't hesitate to reach out to me at qttho@hcmut.edu.vn. Your questions and insights are what make this field so dynamic and exciting!
+
+Remember how we talked about the potential applications of NLP in the previous slide? Well, as we move forward, we're going to explore the modern approaches that make these applications possible. We're talking cutting-edge stuff here, folks! 
+
+And here's a little teaser for you - by the end of this lecture, you'll understand how these approaches are shaping the future of AI-driven solutions. So, buckle up! We're about to take a deep dive into the first of our modern NLP approaches. Are you ready to have your mind BLOWN???
+"""
