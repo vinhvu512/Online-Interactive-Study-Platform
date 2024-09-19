@@ -18,6 +18,7 @@ from google.cloud import storage
 from google.oauth2 import service_account
 from google.api_core import exceptions as google_exceptions
 import concurrent.futures
+import gc
 
 load_dotenv()
 
@@ -43,10 +44,7 @@ class GenerateVideoView(View):
             else:
                 return JsonResponse({'error': 'Failed to download PDF'}, status=400)
 
-            processor = GPTProcessor2(
-                openai_api_key = os.getenv("OPENAI_API_KEY"),
-                anthropic_api_key = os.getenv("ANTHROPIC_API_KEY"),
-            )
+            processor = GPTProcessor2(openai_api_key = os.getenv("OPENAI_API_KEY"))
 
             # Process the downloaded PDF to generate the video
             descriptions_file, image_files = processor.process_pdf_to_descriptions(pdf_path, output_folder)
@@ -64,7 +62,7 @@ class GenerateVideoView(View):
             final_context_file = os.path.join(generated_contents_dir, final_context_filename)
             
             # Process with Claude and save the result to the new location
-            processor.process_with_claude(descriptions_file, final_context_file)
+            processor.process_with_openai(descriptions_file, final_context_file)
             
             video_path, _, _ = processor.create_video_from_context(final_context_file, image_files, output_folder)
             
@@ -145,7 +143,9 @@ class GenerateVideoView(View):
         except Exception as e:
             print(f"Error in GenerateVideoView: {e}")
             return JsonResponse({'error': str(e)}, status=500)
-
+        finally:
+            #Ensure all resources are released
+            gc.collect()
 def csrf(request):
     token = get_token(request)
     return JsonResponse({'csrfToken': token})
