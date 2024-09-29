@@ -23,6 +23,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Course } from "@prisma/client";
 import Image from "next/image";
 import { FileUpload } from "@/components/file-uploader";
+import imageLoader from "@/utils/imageLoader";
 
 interface ImageFormProps {
   initialData: Course;
@@ -88,11 +89,20 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
           </div>
         ) : (
           <div className="relative aspect-video mt-2">
-            <Image
+            {/* <Image
               alt="Upload"
               fill
               className="object-cover rounded-md"
-              src={initialData.imageUrl}
+              src={initialData.imageUrl || "https://utfs.io/f/c5b6d33d-6266-4197-8347-3a27218088af-tra55.png"}
+            /> */}
+            <Image
+              src={initialData.imageUrl || ""}
+              alt="Course image"
+              width={1000}
+              height={667}
+              className="object-cover rounded-md"
+              loader={imageLoader}
+              unoptimized
             />
           </div>
         ))}
