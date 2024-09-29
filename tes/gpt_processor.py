@@ -9,15 +9,15 @@ from PIL import Image
 import numpy as np
 import fitz  # PyMuPDF
 import natsort
-import anthropic
+from openai import OpenAI
+from openai.types.chat.chat_completion import ChatCompletionMessage
 
 
 class GPTProcessor2:
-    def __init__(self, openai_api_key, anthropic_api_key):
+    def __init__(self, openai_api_key):
         self.openai_api_key = openai_api_key
-        self.anthropic_api_key = anthropic_api_key
         openai.api_key = openai_api_key
-        self.anthropic_client = anthropic.Anthropic(api_key=anthropic_api_key)
+        self.openai_client = OpenAI(api_key=openai_api_key)
 
     def images_from_folder(self, folder_path):
         """Reads all images from a folder and sorts them."""
@@ -130,7 +130,7 @@ class GPTProcessor2:
         self.save_descriptions(descriptions, descriptions_file)
         return descriptions_file, image_files
 
-    def process_with_claude(self, descriptions_file, output_file):
+    def process_with_openai(self, descriptions_file, output_file):
         full_content = self.read_file(descriptions_file)
         total_slides = len(re.findall(r'#slide\d+#', full_content))
 
@@ -147,14 +147,14 @@ class GPTProcessor2:
             end = min(start + batch_size - 1, total_slides)
             print(f"Processing batch {i} (slides {start}-{end})")
 
-            processed_batch = self.process_batch(self.anthropic_client, full_content, start, end, total_slides)
+            processed_batch = self.process_batch(self.openai_client, full_content, start, end, total_slides)
 
             print("Type of processed_batch:", type(processed_batch))
             print("Content of processed_batch:", processed_batch)
 
             # Extract the text content from the TextBlock object
-            if isinstance(processed_batch, list) and len(processed_batch) > 0 and hasattr(processed_batch[0], 'text'):
-                processed_batch = processed_batch[0].text
+            if isinstance(processed_batch, ChatCompletionMessage) and len(processed_batch) > 0 and hasattr(processed_batch, '__str__'):
+                processed_batch = processed_batch.content
             elif not isinstance(processed_batch, str):
                 processed_batch = str(processed_batch)
 
@@ -182,7 +182,7 @@ class GPTProcessor2:
         return video_path, slide_descriptions, durations
 
     def pdf_to_images(self, pdf_path, output_folder):
-        """Converts a PDF into images."""
+        """Converts a PDF into high-resolution images."""
         pdf_document = fitz.open(pdf_path)
         num_pages = pdf_document.page_count
 
@@ -191,7 +191,9 @@ class GPTProcessor2:
         image_paths = []
         for page_num in range(num_pages):
             page = pdf_document.load_page(page_num)
-            pix = page.get_pixmap()
+            zoom = 2  # Increase this value for higher resolution
+            mat = fitz.Matrix(zoom, zoom)
+            pix = page.get_pixmap(matrix=mat, alpha=False)
             image_path = os.path.join(output_folder, f"slide_{page_num + 1}.png")
             pix.save(image_path)
             image_paths.append(image_path)
@@ -222,6 +224,7 @@ class GPTProcessor2:
             duration = audio.duration
             durations.append(duration)
             img = Image.open(image_file)
+            img = img.resize((1280, 720), Image.LANCZOS)  # Resize image to 720p
             img_array = np.array(img)
             img_clip = ImageSequenceClip([img_array], durations=[duration])
             img_clip = img_clip.set_audio(audio)
@@ -289,33 +292,40 @@ add emotion, but not too rude, emotion of the speech is identify by ** the caps 
 
         prompt = self.create_prompt(batch_content, start, end, total_slides)
 
-        message = client.messages.create(
-            model="claude-3-5-sonnet-20240620",
-            max_tokens=4000,
-            temperature=0,
+        message = client.chat.completions.create (
+            model="gpt-4o",
             messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": prompt
-                        }
-                    ]
-                }
-            ]
+              {
+                "role": "user",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": prompt
+                  }
+                ]
+              }
+            ],
+            temperature=0,
+            max_tokens=4000,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0,
+            response_format={
+              "type": "text"
+            }            
         )
 
-        print("Type of message.content:", type(message.content))
-        print("Content of message:", message.content)
+        response = message.choices[0].message
+
+        print("Type of message.content:", type(response))
+        print("Content of message:", response)
 
         # Return the text content directly
-        if isinstance(message.content, list) and len(message.content) > 0 and hasattr(message.content[0], 'text'):
-            return message.content[0].text
+        if isinstance(response, ChatCompletionMessage) and len(response.content) > 0 and hasattr(response.content, '__str__'):
+            return response.content
         else:
-            return str(message.content)
+            return str(response)
 
     def extract_slide_descriptions(self, final_context):
         slide_descriptions = re.findall(r'#slide\d+#(.*?)(?=#slide\d+#|\Z)', final_context, re.DOTALL)
         return [desc.strip() for desc in slide_descriptions]
-

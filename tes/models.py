@@ -15,7 +15,7 @@ class Video(models.Model):
     summaries = models.JSONField(null=True, blank=True)
     questions = models.JSONField(null=True, blank=True)  # Add questions field
     durations = models.JSONField(null=True, blank=True)  # Add durations field
-
+    video_url = models.URLField(max_length=500, blank=True, null=True)
     def __str__(self):
         return self.title
 

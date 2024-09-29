@@ -14,6 +14,11 @@ from .utils import search_arxiv, generate_summary, generate_multiple_choice, gen
 from .gpt_processor import GPTProcessor2
 from .models import Video, GeneratedContent
 from dotenv import load_dotenv
+from google.cloud import storage
+from google.oauth2 import service_account
+from google.api_core import exceptions as google_exceptions
+import concurrent.futures
+import gc
 
 load_dotenv()
 
@@ -39,10 +44,7 @@ class GenerateVideoView(View):
             else:
                 return JsonResponse({'error': 'Failed to download PDF'}, status=400)
 
-            processor = GPTProcessor2(
-                openai_api_key = os.getenv("OPENAI_API_KEY"),
-                anthropic_api_key = os.getenv("ANTHROPIC_API_KEY"),
-            )
+            processor = GPTProcessor2(openai_api_key = os.getenv("OPENAI_API_KEY"))
 
             # Process the downloaded PDF to generate the video
             descriptions_file, image_files = processor.process_pdf_to_descriptions(pdf_path, output_folder)
@@ -60,10 +62,50 @@ class GenerateVideoView(View):
             final_context_file = os.path.join(generated_contents_dir, final_context_filename)
             
             # Process with Claude and save the result to the new location
-            processor.process_with_claude(descriptions_file, final_context_file)
+            processor.process_with_openai(descriptions_file, final_context_file)
             
             video_path, _, _ = processor.create_video_from_context(final_context_file, image_files, output_folder)
             
+            # Tạo tên file động cho video khi lưu lên Google Cloud
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            unique_id = uuid.uuid4().hex[:8]
+            dynamic_video_filename = f"video_{timestamp}_{unique_id}.mp4"
+
+            credentials = service_account.Credentials.from_service_account_file(
+                'tes/google-authetication.json',
+                scopes=["https://www.googleapis.com/auth/cloud-platform"]
+            )
+            bucket_name = "bki-slide-to-vid"
+            storage_client = storage.Client(credentials=credentials)
+            bucket = storage_client.bucket(bucket_name)
+
+            def upload_file(file_path, cloud_filename):
+                video_url = f"https://storage.googleapis.com/{bucket_name}/{cloud_filename}"
+                try:
+                    # Tải lên Google Cloud Storage với tên file động
+                    blob = bucket.blob(cloud_filename)
+                    blob.upload_from_filename(file_path)
+                    print(f"Đã tải lên GCP: {cloud_filename}")
+
+                    # Xóa file cục bộ
+                    os.remove(file_path)
+                    print(f"Đã xóa file cục bộ: {file_path}")
+
+                except google_exceptions.Conflict:
+                    print(f"File {cloud_filename} đã tồn tại trong bucket. Bỏ qua tải lên.")
+                    os.remove(file_path)
+                    print(f"Đã xóa file cục bộ: {file_path}")
+                except google_exceptions.Forbidden as e:
+                    print(f"Lỗi quyền truy cập khi tải lên {cloud_filename}: {e}")
+                except Exception as e:
+                    print(f"Lỗi khi xử lý {cloud_filename}: {e}")
+
+                return video_url
+
+            print(f"Video path: {video_path}")
+            video_url = upload_file(video_path, dynamic_video_filename)
+            print(f"Video URL: {video_url}")
+
             # Generate summary, multiple-choice questions, and find arXiv papers
             with open(final_context_file, 'r') as f:
                 context = f.read()
@@ -84,26 +126,11 @@ class GenerateVideoView(View):
                 generated_content.save()
 
             # Correct the URL to be served via Django
-            video_url = request.build_absolute_uri(
-                os.path.join(settings.MEDIA_URL, 'generated_videos', video_filename)
-            )
-
-            # Update the chapter in Prisma
-            # prisma_url = "http://localhost:3000/api/updateChapter"  # Adjust this URL to your Next.js API route
-            # prisma_data = {
-            #     "chapterId": chapter_id,
-            #     "videoUrl": video_url,
-            #     "summary": summary,
-            #     "multipleChoice": json.dumps(multiple_choice),
-            #     "arxivPapers": json.dumps(arxiv_papers)
-            # }
+            # video_url = request.build_absolute_uri(
+            #     os.path.join(settings.MEDIA_URL, 'generated_videos', video_filename)
+            # )
+            ##
             
-            # Use requests instead of httpx for synchronous request
-            # response = requests.post(prisma_url, json=prisma_data)
-            # if response.status_code != 200:
-            #     print(f"Error updating chapter in Prisma: {response.text}")
-            #     return JsonResponse({'error': 'Failed to update chapter in Prisma'}, status=500)
-
             return JsonResponse({
                 'videoPath': video_url,
                 'contentId': generated_content.id,
@@ -116,7 +143,9 @@ class GenerateVideoView(View):
         except Exception as e:
             print(f"Error in GenerateVideoView: {e}")
             return JsonResponse({'error': str(e)}, status=500)
-
+        finally:
+            #Ensure all resources are released
+            gc.collect()
 def csrf(request):
     token = get_token(request)
     return JsonResponse({'csrfToken': token})

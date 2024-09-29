@@ -1,0 +1,34 @@
+full_content = """
+
+#slide1#
+
+Welcome, everyone! Today, we're diving into the fascinating world of Natural Language Processing, or NLP. It's a field that's *REVOLUTIONIZING* how we interact with technology, and I'm thrilled to guide you through its modern approaches.
+
+Now, you might be wondering, "Why should I care about NLP?" Well, imagine a world where your devices truly understand you - not just your words, but your intent, your emotions, even your sarcasm! That's the power of NLP, and it's happening right now.
+
+We'll be exploring how machines are learning to read, understand, and generate human language. It's not just about programming anymore; it's about teaching computers to think more like us. Exciting, isn't it???
+
+As we progress, we'll uncover the foundations of NLP and then leap into the cutting-edge techniques that are shaping our digital future. From chatbots to language translation, from sentiment analysis to voice assistants - NLP is EVERYWHERE!
+
+Remember, this journey we're embarking on today is more than just theory. It's about understanding the technology that's rapidly becoming an integral part of our daily lives. So, keep your minds open and your questions ready!
+
+Oh, and before I forget - if any of you have burning questions that just can't wait, feel free to reach out to me at qttho@hcmut.edu.vn. Don't be shy; I don't bite... much! *wink*
+
+Now, let's dive deeper into this linguistic adventure, shall we?
+
+#slide2#
+
+Alright, class! You've just gotten a taste of what NLP is all about. But who's the mad scientist behind today's lecture? Well, that would be me - Quan Thanh Tho, at your service!
+
+I've been knee-deep in the world where computers and human language collide for years now. It's a bit like teaching a robot to understand Shakespeare - challenging, but oh so rewarding!
+
+Now, you might be thinking, "Great, another tech geek talking about computers." But hold onto your seats! This isn't just about machines; it's about *US* - how we communicate, how we express ourselves, and how technology can bridge the gaps in human understanding.
+
+Remember how we talked about NLP being everywhere in our lives? Well, we're going to unpack that. We'll explore how machine learning and deep neural networks are making computers more 'human-like' in their language processing. It's like giving machines a crash course in Human 101!
+
+As we move forward, keep in mind the foundations we've laid. The basic concept of NLP we discussed? That's our launchpad. We're about to blast off into more advanced territories - neural networks, deep learning, the works! It's going to be a wild ride, so buckle up!
+
+And hey, if at any point you feel lost in the tech jargon jungle, just give a shout. Or better yet, shoot me an email at qttho@hcmut.edu.vn. I'm here to be your guide in this NLP wilderness.
+
+Ready to have your minds blown? Let's dive into the nitty-gritty of modern NLP techniques. Trust me, by the end of this, you'll never look at your smartphone's autocorrect the same way again!
+"""
