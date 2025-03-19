@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "@prisma/client": "^5.15.1",
-    "js-cookie": "^3.0.5",
-    "react-confetti": "^6.1.0",
-    "react-hot-toast": "^2.4.1"
-  }
-}

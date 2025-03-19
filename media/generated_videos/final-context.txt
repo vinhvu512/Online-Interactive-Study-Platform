@@ -1,0 +1,30 @@
+full_content = """
+
+#slide1#
+
+... Let's dive into the fascinating world of Natural Language Processing! 
+
+As we've just discussed, NLP is a *CRUCIAL* subfield of artificial intelligence that's revolutionizing how we interact with technology. Think about it - every time you ask Siri a question or chat with a customer service bot, you're experiencing NLP in action! It's *EVERYWHERE*, and its importance in our digital landscape cannot be overstated.
+
+Now, let's take a moment to appreciate the *INCREDIBLE* journey NLP has taken. Remember the days of clunky rule-based systems? Those were like trying to understand a foreign language with nothing but a pocket dictionary! But NOW??? We've entered an era of sophisticated, data-driven approaches that are as flexible and nuanced as human communication itself.
+
+Imagine the POSSIBILITIES!!! From breaking down language barriers with advanced machine translation to understanding the subtle nuances of human emotion through sentiment analysis - the applications are *ENDLESS*. And let me tell you, we're just scratching the surface here.
+
+As we move forward, keep in mind how this evolution from traditional to modern NLP methods has opened up a whole new world of opportunities. This transition will be crucial to understanding the advanced concepts we'll explore later in our lecture series.
+
+#slide2#
+
+Now, you might be wondering, "Who's this mysterious guide leading us through the NLP labyrinth?" Well, let me introduce you to our esteemed lecturer, Quan Thanh Tho from Ho Chi Minh City University of Technology. With a background as robust as a well-trained language model, Professor Tho is going to take us on a *MIND-BENDING* journey through the intricacies of modern NLP.
+
+And here's a pro tip for you: jot down that email address - qttho@hcmut.edu.vn. Trust me, you'll want to have this handy when those 3 AM epiphanies about neural architectures strike!
+
+Now, remember how we talked about the shift from traditional to modern NLP methods? Well, buckle up, because we're about to take that concept and run with it! We're going to explore how supervised learning techniques have transformed the field, dive into the *FASCINATING* world of neural network architectures, and - hold onto your hats - we'll even venture into the realm of transformer models like BERT and GPT-3.
+
+These aren't just fancy acronyms, folks. They're the building blocks of a revolution in how machines understand and generate human language. And by the end of this series? You'll be speaking their language too!
+
+But before we get too ahead of ourselves, let's take a step back. You've already learned about the basics of NLP and its evolution. Now, we're going to see how these foundational concepts serve as a launchpad for the cutting-edge techniques we'll be exploring. 
+
+Remember the challenges we mentioned earlier - syntactic ambiguity, semantic understanding, data scarcity? Keep those in mind, because we're about to discover how modern NLP approaches are tackling these head-on. It's like watching David take on Goliath, but with algorithms!
+
+So, are you ready to embark on this thrilling NLP adventure? Let's dive in and unravel the mysteries of language, one algorithm at a time!
+"""

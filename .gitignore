@@ -1,0 +1,7 @@
+# Ignore .env file
+tes/.env
+
+# Other files and directories to ignore
+node_modules/
+dist/
+*.logtes/.env

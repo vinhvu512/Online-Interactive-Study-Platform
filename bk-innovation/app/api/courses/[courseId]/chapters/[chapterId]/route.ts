@@ -98,7 +98,6 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Ensure this user owns the course
     const ownCourse = await db.course.findUnique({
       where: {
         id: params.courseId,
@@ -110,46 +109,25 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Update chapter
+    // Parse JSON strings if they exist
+    const multipleChoice = typeof values.multipleChoice === 'string' 
+      ? JSON.parse(values.multipleChoice) 
+      : values.multipleChoice || {};
+    const arxivPapers = typeof values.arxivPapers === 'string'
+      ? JSON.parse(values.arxivPapers)
+      : values.arxivPapers || {};
+
     const chapter = await db.chapter.update({
       where: {
         id: params.chapterId,
         courseId: params.courseId,
       },
-      data: { ...values },
+      data: {
+        ...values,
+        multipleChoice,
+        arxivPapers,
+      },
     });
-
-    //Handle video upload
-    if (values.videoUrl) {
-      const existingMuxData = await db.muxData.findFirst({
-        where: {
-          chapterId: params.chapterId,
-        },
-      });
-
-      if (existingMuxData) {
-        await video.assets.delete(existingMuxData.assetId);
-        await db.muxData.delete({
-          where: {
-            id: existingMuxData.id,
-          },
-        });
-      }
-
-      const asset = await video.assets.create({
-        input: values.videoUrl,
-        playback_policy: ["public"],
-        test: false,
-      });
-
-      await db.muxData.create({
-        data: {
-          chapterId: params.chapterId,
-          assetId: asset.id,
-          playbackId: asset.playback_ids?.[0]?.id,
-        },
-      });
-    }
 
     return NextResponse.json(chapter);
   } catch (error) {
@@ -157,3 +135,4 @@ export async function PATCH(
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
+

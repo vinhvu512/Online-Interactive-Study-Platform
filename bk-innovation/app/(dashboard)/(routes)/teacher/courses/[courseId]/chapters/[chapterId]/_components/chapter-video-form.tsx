@@ -60,6 +60,7 @@ export const ChapterVideoForm = ({
         `/api/courses/${courseId}/chapters/${chapterId}`,
         values,
       );
+
       toast.success("Chapter updated");
       toggleEditing();
       router.refresh();
@@ -105,6 +106,7 @@ export const ChapterVideoForm = ({
             endpoint="chapterVideo"
             onChange={(url) => {
               if (url) {
+                console.log(url);
                 onSubmit({ videoUrl: url });
               }
             }}
