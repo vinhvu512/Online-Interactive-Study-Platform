@@ -1,7 +1,65 @@
-# Ignore .env file
-tes/.env
+#
+# Root .gitignore (Next.js + Python/Django + generated media)
+#
 
-# Other files and directories to ignore
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+*.iml
+
+# Python
+**/__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+*.sqlite3
+db.sqlite3
+*.db
+
+.env
+.env.*
+venv/
+.venv/
+ENV/
+env/
+
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Next.js / Node
 node_modules/
+.next/
+out/
+build/
 dist/
-*.logtes/.env
+coverage/
+*.tsbuildinfo
+
+.vercel/
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Media / generated artifacts
+media/generated_videos/
+media/generated_content/
+
+# Vector store / runtime storage
+storage/
+tes/storage/
+
+# Secrets / credentials
+*.pem
+tes/google-authetication.json
+tes/google-authentication.json

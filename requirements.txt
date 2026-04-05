@@ -1,0 +1,31 @@
+# LMS Python stack: Django (tes app), video pipeline (gpt_processor), Chainlit (tes/chatbot.py)
+# Create venv:  python3.11 -m venv .venv
+# Activate:    source .venv/bin/activate   (Windows: .venv\Scripts\activate)
+# Install:     pip install -r requirements.txt
+
+Django>=5.0,<6
+
+# Chainlit 2.x matches Pydantic v2 (avoids old chainlit + pydantic2 crashes)
+chainlit>=2.10.0,<3
+
+# RAG / agent (chatbot.py)
+llama-index>=0.11.0
+llama-index-llms-openai>=0.3.0
+# .txt / default file readers for SimpleDirectoryReader (avoids "llama-index-readers-file not found")
+llama-index-readers-file>=0.1.0
+
+openai>=1.40.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# Video generation (gpt_processor.py)
+moviepy>=1.0.3
+imageio>=2.34.0
+imageio-ffmpeg>=0.4.0
+numpy>=1.26.0,<3
+Pillow>=10.0.0
+PyMuPDF>=1.24.0
+natsort>=8.4.0
+
+# uploads (tes/views.py)
+boto3>=1.34.0

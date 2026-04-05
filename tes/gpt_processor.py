@@ -33,46 +33,76 @@ class GPTProcessor2:
         image_content = []
         for filename in filenames:
             base64_image = self.encode_image(filename)
+            ext = os.path.splitext(filename)[1].lower()
+            mime = "image/png" if ext == ".png" else "image/jpeg"
             image_content.append({
                 "type": "image_url",
                 "image_url": {
-                    "url": f"data:image/jpeg;base64,{base64_image}",
-                    "detail": "low"
+                    "url": f"data:{mime};base64,{base64_image}",
+                    "detail": "high",
                 },
             })
         return image_content
 
     def process_response(self, json_response):
-        content = json_response['choices'][0]['message']['content']
+        if json_response.get("error"):
+            raise ValueError(f"OpenAI API error: {json_response['error']}")
+        choices = json_response.get("choices") or []
+        if not choices:
+            raise ValueError("OpenAI API returned no choices")
+        content = (choices[0].get("message") or {}).get("content") or ""
         slides = re.split(r'(#slide\d+#)', content)[1:]
 
         slide_dict = {}
         for i in range(0, len(slides), 2):
-            slide_number = int(re.findall(r'\d+', slides[i])[0])
+            if i + 1 >= len(slides):
+                break
+            tag = slides[i]
+            nums = re.findall(r'\d+', tag)
+            if not nums:
+                continue
+            slide_number = int(nums[0])
             slide_text = slides[i + 1].strip()
             slide_dict[slide_number] = slide_text
 
         return slide_dict
 
-    def send_batch_request(self, image_files, start_slide, previous_response_text="", is_first_batch=True):
+    def send_batch_request(
+        self,
+        image_files,
+        start_slide,
+        previous_response_text="",
+        is_first_batch=True,
+        strict=False,
+    ):
         """Sends a batch of image files to the API and returns the response."""
         image_content = self.create_base64_image_content(image_files)
 
         slide_tags = [f"#slide{start_slide + i}#" for i in range(len(image_files))]
+        tags_joined = ", ".join(slide_tags)
+        end_slide = start_slide + len(image_files) - 1
+
+        base_instructions = (
+            f"These are images of presentation slides (pages {start_slide}–{end_slide}). "
+            "Describe visible text, diagrams, and bullet points and write engaging professor-style lecture narration. "
+            f"You MUST output exactly {len(image_files)} sections. Each section MUST start with one of these tags on its own line: {tags_joined}. "
+            "After each tag, write the narration for that slide only. "
+            "Do not add a title, preamble, apology, or refusal—your first characters must be the first required tag. "
+            "Do not use any other #slideN# tags."
+        )
+        if strict:
+            base_instructions += (
+                f" RETRY: Your previous answer did not use the required tags. "
+                f"Start now with exactly #slide{start_slide}# then narration, then #slide{start_slide + 1}#, and so on."
+            )
 
         if is_first_batch:
-            prompt_text = (
-                    previous_response_text + " "
-                                             "Please read the content of these slides carefully and take on the role of a professor to give a lecture. I need you to understand the meaning of each slide thoroughly and explain them with smooth transitions between the content, rather than just reading the existing text. Please help me achieve this. Since I need to use this later, please divide the content with the tags " + ", ".join(
-                slide_tags) + " for easy reference. Make sure the explanations are longer and more meaningful, if which part you think important for the lecture, explain detail. Note, only use the tags " + ", ".join(
-                slide_tags) + " and do not include any other text."
-            )
+            prompt_text = f"{previous_response_text}\n\n{base_instructions}"
         else:
             prompt_text = (
-                    previous_response_text + " "
-                                             "Please continue reading the content of these slides carefully and take on the role of a professor to give a lecture. (Do not perform greetings) I need you to understand the meaning of each slide thoroughly and explain them with smooth transitions between the content, rather than just reading the existing text. Please help me achieve this. Since I need to use this later, please divide the content with the tags " + ", ".join(
-                slide_tags) + " for easy reference. Make sure the explanations are longer and more meaningful, if which part you think important for the lecture. Note, only use the tags " + ", ".join(
-                slide_tags) + " and do not include any other text."
+                f"{previous_response_text}\n\n"
+                f"{base_instructions} "
+                "Continue the lecture in the same tone; do not greet the audience."
             )
 
         text_content = {
@@ -80,30 +110,45 @@ class GPTProcessor2:
             "text": prompt_text,
         }
 
+        system_text = (
+            "You are an educational assistant that narrates presentation slides for video generation. "
+            "The images are instructional slide decks (not private photos). "
+            "You always follow the user's delimiter format exactly so downstream code can parse your output."
+        )
+
         messages = [
+            {"role": "system", "content": system_text},
             {
                 "role": "user",
                 "content": [
                     text_content,
-                    *image_content
-                ]
-            }
+                    *image_content,
+                ],
+            },
         ]
 
         headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.openai_api_key}"
+            "Authorization": f"Bearer {self.openai_api_key}",
         }
 
         payload = {
             "model": "gpt-4o",
             "messages": messages,
-            "max_tokens": 3000
+            "max_tokens": 4096,
         }
 
-        response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
-        print("Response JSON:", response.json())
-        return response.json()
+        response = requests.post(
+            "https://api.openai.com/v1/chat/completions",
+            headers=headers,
+            json=payload,
+            timeout=300,
+        )
+        data = response.json()
+        if response.status_code >= 400:
+            raise ValueError(f"OpenAI HTTP {response.status_code}: {data}")
+        print("Response JSON:", data)
+        return data
 
     def process_pdf_to_descriptions(self, pdf_path, output_folder):
         image_folder = os.path.join(output_folder, 'images')
@@ -116,16 +161,42 @@ class GPTProcessor2:
 
         for i in range(0, len(image_files), batch_size):
             batch_files = image_files[i:i + batch_size]
-            response = self.send_batch_request(batch_files, start_slide, previous_response_text, is_first_batch)
-            slide_dict = self.process_response(response)
+            expected_keys = set(range(start_slide, start_slide + len(batch_files)))
 
-            previous_response_text = response['choices'][0]['message']['content']
+            response = self.send_batch_request(
+                batch_files, start_slide, previous_response_text, is_first_batch
+            )
+            slide_dict = self.process_response(response)
+            if expected_keys - set(slide_dict.keys()):
+                response = self.send_batch_request(
+                    batch_files,
+                    start_slide,
+                    previous_response_text,
+                    is_first_batch,
+                    strict=True,
+                )
+                slide_dict = self.process_response(response)
+
+            missing = expected_keys - set(slide_dict.keys())
+            if missing:
+                raise ValueError(
+                    f"Vision model did not return narration for slides {sorted(missing)}. "
+                    f"Got tags for slides {sorted(slide_dict.keys())}. "
+                    "Check API key, model access, or try a smaller PDF batch."
+                )
+
+            previous_response_text = response["choices"][0]["message"]["content"]
             is_first_batch = False
 
             all_descriptions.update(slide_dict)
             start_slide += batch_size
 
         descriptions = [all_descriptions[key] for key in sorted(all_descriptions.keys())]
+        if len(descriptions) != len(image_files):
+            raise ValueError(
+                f"Expected {len(image_files)} slide narrations, got {len(descriptions)}. "
+                "Vision parsing failed partway through the PDF."
+            )
         descriptions_file = os.path.join(output_folder, "descriptions.txt")
         self.save_descriptions(descriptions, descriptions_file)
         return descriptions_file, image_files
@@ -235,7 +306,11 @@ class GPTProcessor2:
             final_clip = concatenate_videoclips(clips, method="compose")
             final_clip.write_videofile(output_file, codec="libx264", audio_codec="aac", fps=fps)
         else:
-            print("No clips to concatenate")
+            raise RuntimeError(
+                "No video clips to concatenate: no audio was produced for slides "
+                f"(images={len(image_files)}, audio={len(audio_files)}). "
+                "Usually the vision step returned no #slideN# narration."
+            )
 
         return durations
 

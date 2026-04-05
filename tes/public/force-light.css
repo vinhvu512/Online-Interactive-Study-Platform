@@ -1,0 +1,18 @@
+/* Hint UA / scrollbars before Tailwind theme class applies */
+:root,
+html {
+  color-scheme: light;
+}
+
+/* Hide welcome / chainlit.md trigger (see Chainlit Header readme-button) */
+#root #readme-button {
+  display: none !important;
+}
+
+/* Scope to Chainlit mount so we don't hit unrelated buttons */
+#root button[aria-label*="Theme" i],
+#root button[aria-label*="theme" i],
+#root button[aria-label*="Appearance" i],
+#root button[aria-label*="appearance" i] {
+  display: none !important;
+}

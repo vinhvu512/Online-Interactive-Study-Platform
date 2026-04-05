@@ -1,8 +1,8 @@
 full_content = """
 #slide1#
-Good day everyone, today we will delve into the topic of "Modern Approaches in NLP," or Natural Language Processing. This field is a critical area within artificial intelligence that focuses on the interaction between computers and human languages. We will explore various state-of-the-art methodologies currently being employed to enable machines to understand, interpret, and generate human language. The knowledge we gain can be applied in multiple domains, such as machine translation, sentiment analysis, and conversational agents, among others. Let's embark on this enlightening journey together.
+Welcome to our exploration of "Modern Approaches in NLP." In this course, we'll delve into the cutting-edge techniques that are shaping the future of natural language processing. As you navigate through this content, you'll gain insights into both theoretical advancements and practical applications that are revolutionizing how machines understand and generate human language. Prepare to unlock new potentials with these innovative approaches.
 
 #slide2#
-Before we begin, let me introduce myself. My name is Quan Thanh Tho, and I am affiliated with HCMUT. Should you have any queries or require further clarification on this topic after our lecture, feel free to reach out to me at qttho@hcmut.edu.vn. Interacting and diving deeper into the subject matter can significantly enhance your understanding and application of NLP concepts. As we progress through today's discussion, keep in mind the importance of these modern approaches, especially in the context of ever-evolving technology and increasing reliance on AI-driven solutions. Let's now move forward and start with our first modern approach to NLP.
+Let's begin by introducing our lecturer, Quan Thanh Tho from HCMUT. You can reach out with any inquiries or for further discussion at qttho@hcmut.edu.vn. Throughout this course, we aim to create an engaging learning environment, so don’t hesitate to contact us if you have any questions or require clarification on the topics we cover.
 
 """

@@ -14,9 +14,8 @@ from .utils import search_arxiv, generate_summary, generate_multiple_choice, gen
 from .gpt_processor import GPTProcessor2
 from .models import Video, GeneratedContent
 from dotenv import load_dotenv
-from google.cloud import storage
-from google.oauth2 import service_account
-from google.api_core import exceptions as google_exceptions
+import boto3
+from botocore.exceptions import ClientError
 import concurrent.futures
 import gc
 
@@ -66,40 +65,57 @@ class GenerateVideoView(View):
             
             video_path, _, _ = processor.create_video_from_context(final_context_file, image_files, output_folder)
             
-            # Tạo tên file động cho video khi lưu lên Google Cloud
+            # Tạo tên file động cho video khi lưu lên object storage
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             unique_id = uuid.uuid4().hex[:8]
             dynamic_video_filename = f"video_{timestamp}_{unique_id}.mp4"
 
-            credentials = service_account.Credentials.from_service_account_file(
-                'tes/google-authetication.json',
-                scopes=["https://www.googleapis.com/auth/cloud-platform"]
+            # Upload generated video to S3 (works without GCS credentials).
+            bucket_name = os.getenv("S3_BUCKET_NAME")
+            if not bucket_name:
+                return JsonResponse({"error": "Missing S3_BUCKET_NAME env var"}, status=500)
+
+            s3_region = os.getenv("AWS_REGION", "us-east-1")
+            s3_public_base_url = os.getenv("S3_PUBLIC_BASE_URL")  # optional (e.g. CloudFront domain)
+            aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
+            aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+
+            s3_client = boto3.client(
+                "s3",
+                region_name=s3_region,
+                aws_access_key_id=aws_access_key_id or None,
+                aws_secret_access_key=aws_secret_access_key or None,
             )
-            bucket_name = "bki-slide-to-vid"
-            storage_client = storage.Client(credentials=credentials)
-            bucket = storage_client.bucket(bucket_name)
+
+            def build_s3_url(cloud_filename: str) -> str:
+                if s3_public_base_url:
+                    return f"{s3_public_base_url.rstrip('/')}/{cloud_filename}"
+                if s3_region == "us-east-1":
+                    return f"https://{bucket_name}.s3.amazonaws.com/{cloud_filename}"
+                return f"https://{bucket_name}.s3.{s3_region}.amazonaws.com/{cloud_filename}"
 
             def upload_file(file_path, cloud_filename):
-                video_url = f"https://storage.googleapis.com/{bucket_name}/{cloud_filename}"
+                video_url = build_s3_url(cloud_filename)
+
+                # If object already exists, skip re-upload to save time.
                 try:
-                    # Tải lên Google Cloud Storage với tên file động
-                    blob = bucket.blob(cloud_filename)
-                    blob.upload_from_filename(file_path)
-                    print(f"Đã tải lên GCP: {cloud_filename}")
-
-                    # Xóa file cục bộ
+                    s3_client.head_object(Bucket=bucket_name, Key=cloud_filename)
+                    print(f"File already exists in S3, skipping: {cloud_filename}")
                     os.remove(file_path)
-                    print(f"Đã xóa file cục bộ: {file_path}")
+                    return video_url
+                except ClientError as e:
+                    code = e.response.get("Error", {}).get("Code", "")
+                    # head_object returns 404 / NoSuchKey if it doesn't exist.
+                    if code not in {"404", "NoSuchKey", "NotFound"}:
+                        raise
 
-                except google_exceptions.Conflict:
-                    print(f"File {cloud_filename} đã tồn tại trong bucket. Bỏ qua tải lên.")
-                    os.remove(file_path)
-                    print(f"Đã xóa file cục bộ: {file_path}")
-                except google_exceptions.Forbidden as e:
-                    print(f"Lỗi quyền truy cập khi tải lên {cloud_filename}: {e}")
-                except Exception as e:
-                    print(f"Lỗi khi xử lý {cloud_filename}: {e}")
+                # Upload (public-read so the frontend can use the URL in <video src="...">).
+                extra_args = {"ACL": "public-read", "ContentType": "video/mp4"}
+                s3_client.upload_file(file_path, bucket_name, cloud_filename, ExtraArgs=extra_args)
+                print(f"Đã tải lên S3: {cloud_filename}")
 
+                os.remove(file_path)
+                print(f"Đã xóa file cục bộ: {file_path}")
                 return video_url
 
             print(f"Video path: {video_path}")

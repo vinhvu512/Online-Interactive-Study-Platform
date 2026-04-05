@@ -1,0 +1,18 @@
+full_content = """
+
+#slide1#
+Welcome to our exploration of "Modern Approaches in NLP." In this course, we'll delve into the cutting-edge techniques that are shaping the future of natural language processing. As you navigate through this content, you'll gain insights into both theoretical advancements and practical applications that are revolutionizing how machines understand and generate human language. Prepare to unlock new potentials with these innovative approaches.
+
+Alright, folks, buckle up because we're about to embark on an exciting journey through the world of Natural Language Processing, or NLP as the cool kids call it. Now, I know what you're thinking: "Why should I care about NLP?" Well, let me tell you, it's not just about teaching machines to understand us; it's about transforming how we interact with technology. Imagine a world where your devices not only understand your words but also your intent and emotions. **AMAZING**, right? This is the future we're heading towards, and you're going to be at the forefront of it!
+
+In this course, we'll explore the latest and greatest in NLP. We're talking about techniques that are not just theoretical but have real-world applications that are changing industries. From chatbots that can hold a conversation better than your average human (no offense to any humans here) to systems that can translate languages with the finesse of a seasoned linguist, the possibilities are endless. So, get ready to dive deep into the world of NLP and discover how these modern approaches are unlocking new potentials.
+
+#slide2#
+Let's begin by introducing our lecturer, Quan Thanh Tho from HCMUT. You can reach out with any inquiries or for further discussion at qttho@hcmut.edu.vn. Throughout this course, we aim to create an engaging learning environment, so don’t hesitate to contact us if you have any questions or require clarification on the topics we cover.
+
+Now, before we dive headfirst into the nitty-gritty of NLP, let me introduce you to the mastermind behind this course, Quan Thanh Tho from HCMUT. **APPLAUSE**!!! Quan is not just a lecturer; he's a wizard in the realm of NLP. If you ever find yourself lost in the sea of algorithms and data, fear not! Quan is just an email away at qttho@hcmut.edu.vn. He's here to ensure that your learning experience is as smooth as a well-oiled machine.
+
+We want this course to be as interactive and engaging as possible. So, if you have questions, don't be shy! Reach out, ask away, and let's make this a collaborative journey. Remember, there's no such thing as a silly question, only silly answers, and I promise to keep those to a minimum. **WINK** 
+
+As we move forward, keep in mind that the concepts we'll cover are not just theoretical musings. They're practical tools that you can apply in real-world scenarios. So, let's keep the energy high and the curiosity even higher as we delve into the fascinating world of NLP.
+"""
