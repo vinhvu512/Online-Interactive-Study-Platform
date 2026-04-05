@@ -1,9 +1,10 @@
-# LMS Python stack: Django (tes app), video pipeline (gpt_processor), Chainlit (tes/chatbot.py)
+# LMS Python stack: Django (learning app), video pipeline, Chainlit (learning/chatbot.py)
 # Create venv:  python3.11 -m venv .venv
 # Activate:    source .venv/bin/activate   (Windows: .venv\Scripts\activate)
 # Install:     pip install -r requirements.txt
 
 Django>=5.0,<6
+django-cors-headers>=4.3.0
 
 # Chainlit 2.x matches Pydantic v2 (avoids old chainlit + pydantic2 crashes)
 chainlit>=2.10.0,<3
@@ -27,5 +28,5 @@ Pillow>=10.0.0
 PyMuPDF>=1.24.0
 natsort>=8.4.0
 
-# uploads (tes/views.py)
+# uploads (learning/views.py)
 boto3>=1.34.0

@@ -7,6 +7,7 @@
 .vscode/
 .idea/
 *.iml
+.files/
 
 # Python
 **/__pycache__/
@@ -57,9 +58,9 @@ media/generated_content/
 
 # Vector store / runtime storage
 storage/
-tes/storage/
+learning/storage/
 
 # Secrets / credentials
 *.pem
-tes/google-authetication.json
-tes/google-authentication.json
+learning/google-authetication.json
+learning/google-authentication.json
